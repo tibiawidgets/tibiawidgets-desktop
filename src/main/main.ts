@@ -9,11 +9,20 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import {
+  app,
+  BrowserWindow,
+  shell,
+  ipcMain,
+  nativeImage,
+  Tray,
+  Menu,
+} from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import appIconTray from '../img/16x16.png';
 
 class AppUpdater {
   constructor() {
@@ -125,10 +134,42 @@ app.on('window-all-closed', () => {
   }
 });
 
+/**
+ * Add Tray
+ */
+
+const addTray = () => {
+  let tray: {
+    setContextMenu: (arg0: Electron.Menu) => void;
+    setToolTip: (arg0: string) => void;
+    setTitle: (arg0: string) => void;
+  };
+
+  // eslint-disable-next-line promise/catch-or-return
+  app.whenReady().then(() => {
+    const icon = nativeImage.createFromPath(
+      path.join(`${__dirname}../img/16x16.png`)
+    );
+    icon.resize({ width: 16 });
+    tray = new Tray(icon);
+    // Nota: su código contextMenu, Tooltip y Title ¡irá aquí!
+    const contextMenu = Menu.buildFromTemplate([
+      { label: 'Item1', type: 'radio' },
+      { label: 'Item2', type: 'radio' },
+      { label: 'Item3', type: 'radio', checked: true },
+      { label: 'Item4', type: 'radio' },
+    ]);
+
+    tray.setContextMenu(contextMenu);
+    tray.setToolTip('Tibia Widget Desktop');
+  });
+};
+
 app
   .whenReady()
   .then(() => {
-    createWindow();
+    // createWindow();
+    addTray();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
