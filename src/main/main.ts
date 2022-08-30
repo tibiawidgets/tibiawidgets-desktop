@@ -22,7 +22,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import appIconTray from '../img/16x16.png';
+import { getRashidLocation } from '../services/tibia-api';
 
 class AppUpdater {
   constructor() {
@@ -65,18 +65,18 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
+const RESOURCES_PATH = app.isPackaged
+  ? path.join(process.resourcesPath, 'assets')
+  : path.join(__dirname, '../../assets');
+
+const getAssetPath = (...paths: string[]): string => {
+  return path.join(RESOURCES_PATH, ...paths);
+};
+
 const createWindow = async () => {
   if (isDebug) {
     await installExtensions();
   }
-
-  const RESOURCES_PATH = app.isPackaged
-    ? path.join(process.resourcesPath, 'assets')
-    : path.join(__dirname, '../../assets');
-
-  const getAssetPath = (...paths: string[]): string => {
-    return path.join(RESOURCES_PATH, ...paths);
-  };
 
   mainWindow = new BrowserWindow({
     show: false,
@@ -147,17 +147,28 @@ const addTray = () => {
 
   // eslint-disable-next-line promise/catch-or-return
   app.whenReady().then(() => {
-    const icon = nativeImage.createFromPath(
-      path.join(`${__dirname}../img/16x16.png`)
-    );
+    const icon = nativeImage.createFromPath(getAssetPath('16x16.png'));
     icon.resize({ width: 16 });
     tray = new Tray(icon);
+    const rashidLocation = getRashidLocation();
     // Nota: su código contextMenu, Tooltip y Title ¡irá aquí!
     const contextMenu = Menu.buildFromTemplate([
-      { label: 'Item1', type: 'radio' },
-      { label: 'Item2', type: 'radio' },
-      { label: 'Item3', type: 'radio', checked: true },
-      { label: 'Item4', type: 'radio' },
+      { label: 'Boosted Boss: ', type: 'normal' },
+      { label: 'Boosted Creature', type: 'normal' },
+      {
+        icon: nativeImage
+          .createFromPath(getAssetPath('Rashid.png'))
+          .crop({ x: 60, y: 60, width: 350, height: 350 })
+          .resize({ width: 32 }),
+        label: `Today Rashid is at ${rashidLocation}`,
+        type: 'normal',
+      },
+      { type: 'separator' },
+      {
+        label: 'Exit',
+        type: 'normal',
+        role: 'quit',
+      },
     ]);
 
     tray.setContextMenu(contextMenu);
