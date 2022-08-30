@@ -22,7 +22,11 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { getRashidLocation } from '../services/tibia-api';
+import {
+  getBosses,
+  getCreatures,
+  getRashidLocation,
+} from '../services/tibia-api';
 
 class AppUpdater {
   constructor() {
@@ -135,26 +139,47 @@ app.on('window-all-closed', () => {
 });
 
 /**
+ * Get boosted from category
+ */
+
+type CreatureType = {
+  name: string;
+  race?: string;
+  image_url: string;
+  featured: boolean;
+};
+
+type CreatureListType = {
+  boosted: CreatureType;
+  boostable_boss_list?: Array<CreatureType>;
+  creatureList?: Array<CreatureType>;
+};
+
+function getBoosted(list: CreatureListType): CreatureType {
+  return list.boosted;
+}
+
+/**
  * Add Tray
  */
 
 const addTray = () => {
-  let tray: {
-    setContextMenu: (arg0: Electron.Menu) => void;
-    setToolTip: (arg0: string) => void;
-    setTitle: (arg0: string) => void;
-  };
+  let tray: Tray;
 
   // eslint-disable-next-line promise/catch-or-return
-  app.whenReady().then(() => {
+  app.whenReady().then(async () => {
     const icon = nativeImage.createFromPath(getAssetPath('16x16.png'));
     icon.resize({ width: 16 });
     tray = new Tray(icon);
     const rashidLocation = getRashidLocation();
+    const bosses = await getBosses();
+    const creatures = await getCreatures();
+    const boostedBoss = getBoosted(bosses);
+    const boostedCreature = getBoosted(creatures);
     // Nota: su código contextMenu, Tooltip y Title ¡irá aquí!
     const contextMenu = Menu.buildFromTemplate([
-      { label: 'Boosted Boss: ', type: 'normal' },
-      { label: 'Boosted Creature', type: 'normal' },
+      { label: `Boosted Boss: ${boostedBoss.name}`, type: 'normal' },
+      { label: `Boosted Creature: ${boostedCreature.name}`, type: 'normal' },
       {
         icon: nativeImage
           .createFromPath(getAssetPath('Rashid.png'))

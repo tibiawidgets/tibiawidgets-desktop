@@ -2,30 +2,22 @@
  * Using Tibia Api to get the data
  * https://docs.tibiadata.com/
  */
+import fetch from 'electron-fetch';
 
 // const host = 'https://api.tibiadata.com';
 const host = 'https://dev.tibiadata.com';
 
-export const getBosses = () => {
-  return fetch(`${host}/v2/boostablebosses`)
-    .then((data) => data.json())
-    .then(({ boostable_bosses }) => {
-      return boostable_bosses;
-    })
-    .catch((e) => {
-      console.error('Couldnt fetch bosses');
-    });
+export const getBosses = async () => {
+  const bosses = await fetch(`${host}/v3/boostablebosses`);
+  const json = await bosses.json();
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  return json.boostable_bosses;
 };
 
-export const getCreatures = () => {
-  return fetch(`${host}/v2/creatures`)
-    .then((data) => data.json())
-    .then(({ creatures }) => {
-      return creatures;
-    })
-    .catch((e) => {
-      console.error('Couldnt fetch creatures');
-    });
+export const getCreatures = async () => {
+  const creatures = await fetch(`${host}/v3/creatures`);
+  const json = await creatures.json();
+  return json.creatures;
 };
 
 export const getRashidLocation = () => {
