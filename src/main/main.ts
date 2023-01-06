@@ -17,6 +17,7 @@ import {
   nativeImage,
   Tray,
   Menu,
+  MenuItem,
 } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -89,6 +90,7 @@ const createWindow = async () => {
     height: 728,
     icon: getAssetPath('icon.png'),
     webPreferences: {
+      devTools: false,
       sandbox: false,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
@@ -160,6 +162,11 @@ function getBoosted(list: CreatureListType): CreatureType {
   return list.boosted;
 }
 
+function handlerPartyLootShare(menuItem: MenuItem) {
+  console.log('click on PArty loot share, show textarea', menuItem);
+  createWindow();
+}
+
 /**
  * Add Tray
  */
@@ -205,6 +212,11 @@ const addTray = () => {
         type: 'normal',
       },
       { type: 'separator' },
+      {
+        label: 'Party Loot Share',
+        type: 'normal',
+        click: handlerPartyLootShare,
+      },
       {
         label: 'Exit',
         type: 'normal',

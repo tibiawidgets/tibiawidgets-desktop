@@ -2,6 +2,7 @@ import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import icon from '../../assets/icon.svg';
 import './App.css';
 import 'tailwindcss/tailwind.css';
+import PartyLoot from './screens/PartyLoot';
 
 const Hello = () => {
   return (
@@ -44,7 +45,8 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Hello />} />
+        <Route path="/" element={<PartyLoot />} />
+        <Route path="/party-loot" element={<PartyLoot />} />
       </Routes>
     </Router>
   );
