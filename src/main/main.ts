@@ -20,6 +20,7 @@ import {
 } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import toDataURL from '../tools/url2DataUrl';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import {
@@ -176,16 +177,31 @@ const addTray = () => {
     const creatures = await getCreatures();
     const boostedBoss = getBoosted(bosses);
     const boostedCreature = getBoosted(creatures);
+    const data = await toDataURL(boostedCreature.image_url);
+    const image = nativeImage.createFromBuffer(data);
+    console.log(image.getSize());
+    const bossIcon = nativeImage
+      .createFromDataURL(
+        'https://static.tibia.com/images/global/header/monsters/cyclopssmith.gif'
+      )
+      .resize({ width: 80, height: 100 });
+    const creatureIcon = nativeImage
+      .createFromDataURL(boostedCreature.image_url)
+      .resize({ width: 16 });
+    const rashidIcon = nativeImage
+      .createFromPath(getAssetPath('Rashid.png'))
+      .resize({ width: 80, height: 100 });
     // Nota: su código contextMenu, Tooltip y Title ¡irá aquí!
     const contextMenu = Menu.buildFromTemplate([
-      { label: `Boosted Boss: ${boostedBoss.name}`, type: 'normal' },
+      {
+        icon: bossIcon,
+        label: `Boosted Boss: ${boostedBoss.name}`,
+        type: 'normal',
+      },
       { label: `Boosted Creature: ${boostedCreature.name}`, type: 'normal' },
       {
-        icon: nativeImage
-          .createFromPath(getAssetPath('Rashid.png'))
-          .crop({ x: 60, y: 60, width: 350, height: 350 })
-          .resize({ width: 32 }),
-        label: `Today Rashid is at ${rashidLocation}`,
+        icon: rashidIcon,
+        label: `Rashid is at ${rashidLocation}`,
         type: 'normal',
       },
       { type: 'separator' },
