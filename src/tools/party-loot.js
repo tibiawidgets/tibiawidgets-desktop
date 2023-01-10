@@ -86,8 +86,7 @@ export default () => {
   }
     , r = document.querySelector("#party-loot-input")
     , c = document.querySelector("#party-loot-output");
-  console.log(r,c);
-  r.addEventListener("input", ()=>{
+   r.addEventListener("input", ()=>{
       try {
           const {totalBalance: e, numberOfPeople: t, balancePerPerson: a, transactions: s} = n(r.value)
             , l = [];

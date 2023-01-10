@@ -1,8 +1,10 @@
-import { useEffect } from 'react';
-import dummyPartyLoot from '../../__data__/dummyPartyLoot.txt';
-import CalculateLoot from '../../tools/party-loot';
+import { useEffect, useState } from 'react';
+import dummyPartyLoot from '../../../__data__/dummyPartyLoot.txt';
+import CalculateLoot from '../../../tools/party-loot';
+import './PartyLoot.css';
 
 const PartyLoot = () => {
+  const [text, setText] = useState(dummyPartyLoot);
   useEffect(() => {
     CalculateLoot();
   }, []);
@@ -10,15 +12,12 @@ const PartyLoot = () => {
     <div>
       <h1>Party Loot Share</h1>
       <div className="mainContent">
+        <span>Calculate your share in the hunt.</span>
         <div>
           <textarea
             id="party-loot-input"
-            style={{
-              color: 'black',
-              width: '400px',
-              height: '500px',
-            }}
-            value={dummyPartyLoot}
+            className="party-loot-textarea"
+            defaultValue={text}
           />
         </div>
         <div>

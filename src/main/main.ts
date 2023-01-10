@@ -90,7 +90,7 @@ const createWindow = async () => {
     height: 728,
     icon: getAssetPath('icon.png'),
     webPreferences: {
-      devTools: false,
+      devTools: true,
       sandbox: false,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
@@ -201,13 +201,11 @@ const addTray = () => {
     // Nota: su código contextMenu, Tooltip y Title ¡irá aquí!
     const contextMenu = Menu.buildFromTemplate([
       {
-        icon: bossIcon,
         label: `Boosted Boss: ${boostedBoss.name}`,
         type: 'normal',
       },
       { label: `Boosted Creature: ${boostedCreature.name}`, type: 'normal' },
       {
-        icon: rashidIcon,
         label: `Rashid is at ${rashidLocation}`,
         type: 'normal',
       },

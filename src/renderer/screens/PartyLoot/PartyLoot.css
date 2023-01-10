@@ -1,0 +1,14 @@
+.party-loot-textarea {
+  border: 2px solid black;
+  background-color: darkseagreen;
+  color: black;
+  width: 50%;
+  max-width: 800px;
+  min-width: 400px;
+  height: 500px;
+  padding: 10px;
+}
+
+.mainContent {
+  width: 100%;
+}
