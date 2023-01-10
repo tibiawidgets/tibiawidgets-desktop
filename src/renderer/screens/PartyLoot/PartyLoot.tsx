@@ -25,13 +25,25 @@ const PartyLoot = () => {
       <h1 className="title">Party Loot Share</h1>
       <div className="mainContent">
         <span>Calculate your cut in the hunt.</span>
-        <div>
+        <div className="flex">
           <textarea
             id="party-loot-input"
             className="party-loot-textarea"
             value={text}
             onChange={updateInput}
           />
+          <div className="party-loot-buttons flex-col">
+            <button
+              type="button"
+              className="party-loot-button"
+              onClick={recalculate}
+            >
+              Calculate
+            </button>
+            <button type="button" className="party-loot-button mt-5">
+              Save party session
+            </button>
+          </div>
         </div>
         <div>
           <div

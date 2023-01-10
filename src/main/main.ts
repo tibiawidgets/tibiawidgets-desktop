@@ -211,7 +211,7 @@ const addTray = () => {
       },
       { type: 'separator' },
       {
-        label: 'Party Loot Share',
+        label: 'Open Tibia Widgets',
         type: 'normal',
         click: handlerPartyLootShare,
       },

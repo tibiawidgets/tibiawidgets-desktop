@@ -18,6 +18,17 @@
   min-width: 400px;
 }
 
+.party-loot-buttons {
+  padding: 20px;
+}
+
+.party-loot-button {
+  height: 56px;
+  width: 200px;
+  border: 1px solid rebeccapurple;
+  display: block;
+}
+
 .title {
   font-size: 24px;
   font-weight: bold;
