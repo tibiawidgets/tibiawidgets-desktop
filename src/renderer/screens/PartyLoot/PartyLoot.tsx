@@ -35,12 +35,15 @@ const PartyLoot = () => {
           <div className="party-loot-buttons flex-col">
             <button
               type="button"
-              className="party-loot-button"
+              className="party-loot-button hover:bg-indigo-600 hover:text-white"
               onClick={recalculate}
             >
               Calculate
             </button>
-            <button type="button" className="party-loot-button mt-5">
+            <button
+              type="button"
+              className="party-loot-button mt-5 hover:bg-indigo-600 hover:text-white"
+            >
               Save party session
             </button>
           </div>
@@ -48,7 +51,7 @@ const PartyLoot = () => {
         <div>
           <div
             id="party-loot-output"
-            className="party-loot-output"
+            className="party-loot-output mt-8"
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{ __html: outputText }}
           />
