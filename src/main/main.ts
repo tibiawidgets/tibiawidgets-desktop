@@ -86,11 +86,12 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
+    width: 1180,
     height: 728,
+    resizable: false,
     icon: getAssetPath('icon.png'),
     webPreferences: {
-      devTools: true,
+      devTools: false,
       sandbox: false,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
@@ -186,7 +187,6 @@ const addTray = () => {
     const boostedCreature = getBoosted(creatures);
     const data = await toDataURL(boostedCreature.image_url);
     const image = nativeImage.createFromBuffer(data);
-    console.log(image.getSize());
     const bossIcon = nativeImage
       .createFromDataURL(
         'https://static.tibia.com/images/global/header/monsters/cyclopssmith.gif'

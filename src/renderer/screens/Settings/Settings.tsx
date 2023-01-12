@@ -1,23 +1,24 @@
-import { useState } from 'react';
+import { useTibiaWidgetsContext } from 'contexts/TibiaWidgetsContext';
+import { useEffect, useState } from 'react';
 
 const Settings = () => {
   const [tibiaPath, setTibiaPath] = useState('');
+  const [isPathInitialized, setIsPathInitialized] = useState(false);
+  const { directoryHandler: globalDirectoryHandler, setDirectoryChange } =
+    useTibiaWidgetsContext();
   const handlePathSelect = async () => {
-    const directoryHandle = await window.showDirectoryPicker();
-    // eslint-disable-next-line no-restricted-syntax
-    for await (const entry of directoryHandle.values()) {
-      const fileHandle = await directoryHandle.getFileHandle(entry.name);
-      const huntFile = await fileHandle.getFile();
-      if (entry.name.match('.json')) {
-        console.log(entry.kind, entry.name);
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          console.log(event.target.result);
-        };
-        reader.readAsText(huntFile);
-      }
+    const directoryHandle = await window
+      .showDirectoryPicker()
+      .catch(console.error);
+    if (directoryHandle) {
+      setDirectoryChange(directoryHandle);
     }
   };
+  useEffect(() => {
+    if (globalDirectoryHandler) {
+      setIsPathInitialized(true);
+    }
+  }, [globalDirectoryHandler]);
   return (
     <section>
       <h1 className="section-title">Settings</h1>
@@ -25,20 +26,16 @@ const Settings = () => {
         <div className="card-title text-lg font-bold">
           Configure Tibia Installation Path
         </div>
-        <div className="card-content flex justify-between items-center">
-          <input
-            type="text"
-            className="border-x-2 border-y-2 w-5/6 h-10 text-lg px-2"
-            placeholder="path://example/Tibia"
-            value={tibiaPath}
-            onChange={(e) => setTibiaPath(e.currentTarget.value)}
-          />
-          <button
-            type="button"
-            className=" btn-blue"
-            onClick={handlePathSelect}
-          >
-            Save
+        <div className="card-content flex items-center">
+          <div className="mr-5">
+            {isPathInitialized ? (
+              <span>ok</span>
+            ) : (
+              <span>Not yet selected</span>
+            )}
+          </div>
+          <button type="button" className="btn-blue" onClick={handlePathSelect}>
+            {isPathInitialized ? 'Change' : 'Select'}
           </button>
         </div>
       </div>
