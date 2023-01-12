@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn-blue {
+  @apply bg-blue-500 text-white font-bold py-2 px-4 rounded border-solid;
+}
+.btn-blue:hover {
+  @apply bg-blue-700;
+}
+
+.outlined-text {
+  color: white;
+  text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000,
+    -1px -1px #000, 1px -1px #000, -1px 1px #000;
+}
+
+.li {
+  line-height: 1rem;
+}
+
+#root {
+  height: 100vh;
+}

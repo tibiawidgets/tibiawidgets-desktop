@@ -21,7 +21,7 @@ const PartyLoot = () => {
     recalculate();
   };
   return (
-    <div>
+    <div className="container">
       <h1 className="title">Party Loot Share</h1>
       <div className="mainContent">
         <span>Calculate your cut in the hunt.</span>
