@@ -22,9 +22,9 @@ const PartyLoot = () => {
   };
   return (
     <div className="container">
-      <h1 className="title">Party Loot Share</h1>
+      <h1 className="section-title">Party Loot Share</h1>
       <div className="mainContent">
-        <span>Calculate your cut in the hunt.</span>
+        <p className="my-5">Calculate your cut in the hunt.</p>
         <div className="flex">
           <textarea
             id="party-loot-input"

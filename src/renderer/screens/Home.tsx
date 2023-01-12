@@ -1,7 +1,7 @@
 const Home = () => {
   return (
     <div className="container">
-      <h1 className="text-lg text-4xl font-bold">
+      <h1 className="section-title">
         Welcome to{' '}
         <span className="text-red-500 outlined-title ">Tibia Widgets</span>
       </h1>

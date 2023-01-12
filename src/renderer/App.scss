@@ -2,13 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.btn-blue {
-  @apply bg-blue-500 text-white font-bold py-2 px-4 rounded border-solid;
-}
-.btn-blue:hover {
-  @apply bg-blue-700;
-}
-
 .outlined-text {
   color: white;
   text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000,
@@ -26,4 +19,23 @@
 
 #root {
   height: 100vh;
+}
+
+.drawer-navbar {
+  @apply bg-slate-300 pr-1 border-r-2 border-r-black;
+}
+
+.btn-blue {
+  @apply bg-blue-500 text-white font-bold py-4 px-6 rounded border-solid;
+}
+.btn-blue:hover {
+  @apply bg-blue-700;
+}
+
+.section-title {
+  @apply text-lg text-4xl font-bold;
+}
+
+.section-card {
+  @apply rounded-sm shadow-md shadow-slate-400 p-5;
 }

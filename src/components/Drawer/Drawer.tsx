@@ -11,12 +11,12 @@ const menuItems = [
     route: '/party-loot',
   },
   {
-    label: 'Solo Hunting Sessions',
-    route: '/solo-hunt',
+    label: 'Hunting Sessions',
+    route: '/hunt-sessions',
   },
   {
-    label: 'Party Hunting Sessions',
-    route: '/party-hunt',
+    label: 'Settings',
+    route: '/settings',
   },
 ];
 
@@ -27,7 +27,7 @@ const Drawer = () => (
         {menuItems.map((item) => (
           <NavLink
             key={item.label}
-            className="p-5 font-bold outlined-text"
+            className="p-5 font-bold outlined-text w-14"
             to={item.route}
           >
             {item.label}

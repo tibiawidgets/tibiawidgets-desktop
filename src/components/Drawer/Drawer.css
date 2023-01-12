@@ -7,7 +7,3 @@
   border-radius: 0px 5px 5px 0px;
   outline: 2px solid black;
 }
-
-.drawer-navbar {
-  @apply bg-slate-300 pr-1 border-r-2 border-r-black;
-}
