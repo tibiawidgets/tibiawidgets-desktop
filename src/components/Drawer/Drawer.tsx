@@ -27,7 +27,7 @@ const Drawer = () => (
         {menuItems.map((item) => (
           <NavLink
             key={item.label}
-            className="p-5 font-bold outlined-text w-14"
+            className="p-5 font-bold outlined-text whitespace-nowrap"
             to={item.route}
           >
             {item.label}

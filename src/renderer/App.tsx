@@ -12,10 +12,10 @@ export default function App() {
   return (
     <TibiaWidgetsContextProvider>
       <HuntSessionsContextProvider>
-        <div className="w-full h-full flex overflow-hidden">
+        <div className=" h-full flex">
           <Router>
             <Drawer />
-            <div className="container flex px-5 py-10 flex-grow bg-slate-100 overflow-y-scroll flex-col">
+            <div className="flex px-5 py-10 bg-slate-100 flex-1">
               <Routes>
                 <Route path="/party-loot" element={<PartyLoot />} />
                 <Route path="/settings" element={<Settings />} />

@@ -1,0 +1,11 @@
+.visualizer {
+  min-width: 600px;
+}
+
+.hunting-session-name {
+  padding: 10px 4px;
+}
+
+.hunt-selected {
+  @apply bg-mainBlue text-white font-bold;
+}

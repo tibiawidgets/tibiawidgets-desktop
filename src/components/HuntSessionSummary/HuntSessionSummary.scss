@@ -1,0 +1,58 @@
+.card {
+  width: 100%;
+  min-height: 100px;
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  border: 2px solid black;
+  @apply bg-mainBlue text-white font-bold rounded-md rounded-b-none p-2;
+}
+
+.card-content {
+  @apply flex shadow-md shadow-slate-400 p-2 rounded rounded-t-none bg-slate-100 p-8;
+}
+
+.session-length {
+  font-size: 48px;
+}
+
+.session-length,
+.session-balance {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+}
+
+.session-balance {
+  display: block;
+  text-align: center;
+  font-weight: bold;
+  font-size: 36px;
+}
+
+.session-balance img {
+  margin-right: 10px;
+  margin: auto;
+}
+
+.balance-profit {
+  @apply text-lime-800;
+}
+
+.balance-waste {
+  @apply text-red-800;
+}
+
+.icon {
+  width: 56px;
+  fill: aqua;
+}
+
+.monsters-container {
+  grid-template-columns: repear;
+}
