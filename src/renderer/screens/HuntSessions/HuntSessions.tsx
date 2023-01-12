@@ -27,7 +27,7 @@ const HuntSessions = () => {
         <div>
           <h2 className="text-lg font-bold">Yor hunting sessions</h2>
           <div className="flex h-auto ">
-            <div className="border-2 border-black rounded p-2 mr-1 max-w-sm min-w-60 flex-shrink-0  overflow-y-scroll">
+            <div className="border-2 border-black rounded p-2 mr-1 max-w-sm min-w-60 flex-shrink-0 overflow-y-scroll">
               {hunts.map((hunt: HuntSession) => (
                 <button
                   type="button"
@@ -41,7 +41,7 @@ const HuntSessions = () => {
                 </button>
               ))}
             </div>
-            <div className="border-2 border-black rounded p-2 w-1/2 flex flex-grow justify-center items-center visualizer min-h-full">
+            <div className="border-2 border-black rounded p-2 w-1/2 flex flex-grow justify-center items-center visualizer">
               {selected.session ? (
                 <HuntSessionSummary hunt={selected} />
               ) : (

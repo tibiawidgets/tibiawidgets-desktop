@@ -4,6 +4,7 @@ import './HuntSessionSummary.scss';
 import CoinsImage from '../../../assets/crystalcoins.png';
 import HealIcon from '../../../assets/heal.svg';
 import AttackIcon from '../../../assets/attack.svg';
+import TimeIcon from '../../../assets/time.svg';
 
 const HuntSessionSummary = ({ hunt }: { hunt: HuntSession }) => {
   const session: Session = hunt.session as Session;
@@ -14,6 +15,12 @@ const HuntSessionSummary = ({ hunt }: { hunt: HuntSession }) => {
         <div className="card-title">Hunt Information</div>
         <div className="card-content">
           <p className="session-length outlined-title">
+            <img
+              src={TimeIcon}
+              alt="Session duration"
+              width="56px"
+              className="mr-5"
+            />
             {session['Session length']}
           </p>
           <p
