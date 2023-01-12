@@ -1,4 +1,3 @@
-import { CSSProperties } from 'react';
 import { NavLink } from 'react-router-dom';
 import './Drawer.css';
 
@@ -22,7 +21,7 @@ const menuItems = [
 ];
 
 const Drawer = () => (
-  <nav className="flex h-full bg-cyan-100" aria-label="Sidebar">
+  <nav className="flex h-full drawer-navbar" aria-label="Sidebar">
     <div className="flex flex-col my-5 ">
       <div className="flex flex-col flex-grow">
         {menuItems.map((item) => (

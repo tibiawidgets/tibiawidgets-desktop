@@ -1,7 +1,10 @@
 const Home = () => {
   return (
     <div className="container">
-      <h1 className="text-lg text-4xl font-bold">Welcome to Tibia Widgets</h1>
+      <h1 className="text-lg text-4xl font-bold">
+        Welcome to{' '}
+        <span className="text-red-500 outlined-title ">Tibia Widgets</span>
+      </h1>
       <div>
         <div className="pl-10">
           <p className="mt-10 text-lg">
