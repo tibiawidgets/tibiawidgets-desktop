@@ -10,15 +10,18 @@
 }
 
 .party-loot-output {
+  margin-left: 1rem;
   border: 2px solid red;
-  padding: 5px;
+  padding: 10px;
   background-color: blanchedalmond;
-  width: 50%;
   max-width: 800px;
   min-width: 400px;
 }
 
 .party-loot-buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   padding: 20px;
 }
 

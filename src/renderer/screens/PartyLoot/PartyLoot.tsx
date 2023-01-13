@@ -25,36 +25,36 @@ const PartyLoot = () => {
       <h1 className="section-title">Party Loot Share</h1>
       <div className="mainContent">
         <p className="my-5">Calculate your cut in the hunt.</p>
-        <div className="flex">
+        <div className="flex justify-even w-full">
           <textarea
             id="party-loot-input"
             className="party-loot-textarea"
             value={text}
             onChange={updateInput}
           />
-          <div className="party-loot-buttons flex-col">
-            <button
-              type="button"
-              className="party-loot-button hover:bg-indigo-600 hover:text-white"
-              onClick={recalculate}
-            >
-              Calculate
-            </button>
-            <button
-              type="button"
-              className="party-loot-button mt-5 hover:bg-indigo-600 hover:text-white"
-            >
-              Save party session
-            </button>
+          <div className="w-1/2">
+            <div
+              id="party-loot-output"
+              className="party-loot-output mt-8"
+              // eslint-disable-next-line react/no-danger
+              dangerouslySetInnerHTML={{ __html: outputText }}
+            />
+            <div className="party-loot-buttons">
+              <button
+                type="button"
+                className="party-loot-button hover:bg-indigo-600 hover:text-white"
+                onClick={recalculate}
+              >
+                Calculate
+              </button>
+              <button
+                type="button"
+                className="party-loot-button hover:bg-indigo-600 hover:text-white"
+              >
+                Save party session
+              </button>
+            </div>
           </div>
-        </div>
-        <div>
-          <div
-            id="party-loot-output"
-            className="party-loot-output mt-8"
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{ __html: outputText }}
-          />
         </div>
       </div>
     </div>

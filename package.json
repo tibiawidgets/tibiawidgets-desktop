@@ -226,7 +226,6 @@
       ]
     },
     "win": {
-      "outputDirectory": "%AppData%/TibiaWidgets",
       "target": [
         "nsis"
       ]
