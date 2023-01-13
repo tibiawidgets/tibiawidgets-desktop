@@ -6,7 +6,7 @@ import './HuntSessions.scss';
 
 const HuntSessions = () => {
   const [selected, setSelected] = useState<HuntSession>({ name: '' });
-  const { directoryHandler } = useTibiaWidgetsContext();
+  const { appConfig } = useTibiaWidgetsContext();
   const { hunts } = useHuntSessions();
 
   const getSelectedHunt = (name: string) => {
@@ -23,7 +23,7 @@ const HuntSessions = () => {
       <p className="my-5">
         Revisit your hunting sessions, analyze and improve your hunt.
       </p>
-      {directoryHandler ? (
+      {hunts ? (
         <div>
           <h2 className="text-lg font-bold">Yor hunting sessions</h2>
           <div className="flex h-auto ">

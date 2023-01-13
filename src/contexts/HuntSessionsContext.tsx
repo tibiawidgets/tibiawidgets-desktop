@@ -28,38 +28,18 @@ const HuntSessionsContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [hunts, setHunts] = useState<Array<HuntSession>>([]);
-  const { directoryHandler } = useTibiaWidgetsContext();
+  const { appConfig } = useTibiaWidgetsContext();
 
-  const addHunt = (newHunt: HuntSession) => {
-    const huntsCopy: Array<HuntSession> = hunts;
-    huntsCopy.push(newHunt);
-    setHunts(huntsCopy);
-  };
   const getHuntingSessions = useCallback(async () => {
-    if (directoryHandler) {
-      // eslint-disable-next-line no-restricted-syntax
-      for await (const entry of directoryHandler.values()) {
-        const fileHandle = await directoryHandler.getFileHandle(entry.name);
-        const huntFile = await fileHandle.getFile();
-        if (entry.name.match('.json')) {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            const hunt: HuntSession = {
-              name: entry.name,
-            };
-            try {
-              hunt.session = JSON.parse(event?.target?.result);
-              addHunt(hunt);
-            } catch (e) {
-              console.error('Failed to parse hunt session ', hunt.name);
-            }
-          };
-          reader.readAsText(huntFile);
-        }
-      }
+    if (appConfig.tibiaClientPath) {
+      window.electron.ipcRenderer.on('getHuntSessions', (huntSessions) => {
+        const myhunts = huntSessions as HuntSession[];
+        setHunts(myhunts);
+      });
+      window.electron.ipcRenderer.sendMessage('getHuntSessions', []);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [directoryHandler]);
+  }, [appConfig]);
 
   useEffect(() => {
     getHuntingSessions();

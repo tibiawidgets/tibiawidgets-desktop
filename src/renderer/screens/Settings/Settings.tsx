@@ -1,23 +1,12 @@
 import { useTibiaWidgetsContext } from 'contexts/TibiaWidgetsContext';
-import { useEffect, useState } from 'react';
 
 const Settings = () => {
-  const [isPathInitialized, setIsPathInitialized] = useState(false);
-  const { setDirectoryChange, appConfig } = useTibiaWidgetsContext();
+  const { appConfig } = useTibiaWidgetsContext();
   // TODO: improve handler for selecting from app ui
-  const handlePathSelect = async () => {
-    const directoryHandle = await window
-      .showDirectoryPicker()
-      .catch(console.error);
-    if (directoryHandle) {
-      setDirectoryChange(directoryHandle);
-    }
+  const handlePathSelect = async () => {};
+  const handleClientPathSelect = async () => {
+    window.electron.ipcRenderer.sendMessage('getHuntSessions', []);
   };
-  useEffect(() => {
-    if (appConfig) {
-      setIsPathInitialized(true);
-    }
-  }, [appConfig]);
   return (
     <section className="w-full p-5 max-h-full overflow-y-scroll">
       <h1 className="section-title">Settings</h1>
@@ -30,9 +19,9 @@ const Settings = () => {
             <p>We&apos;ll keep a copy of your hunting session files</p>
             <div className="flex items-center">
               <div className="mr-5">
-                {appConfig.config_path ? (
+                {appConfig.configPath ? (
                   <span className=" border-2 p-2 bg-slate-300">
-                    {appConfig.config_path}
+                    {appConfig.configPath}
                   </span>
                 ) : (
                   <span>Not yet selected</span>
@@ -43,7 +32,7 @@ const Settings = () => {
                 className="btn-blue"
                 onClick={handlePathSelect}
               >
-                {appConfig.config_path ? 'Change' : 'Select'}
+                {appConfig.configPath ? 'Change' : 'Select'}
               </button>
             </div>
           </div>
@@ -58,9 +47,9 @@ const Settings = () => {
             <p>We&apos;ll keep a copy of your hunting session files</p>
             <div className="flex items-center">
               <div className="mr-5">
-                {appConfig.tibia_client_path ? (
+                {appConfig.tibiaClientPath ? (
                   <span className=" border-2 p-2 bg-slate-300">
-                    {appConfig.tibia_client_path}
+                    {appConfig.tibiaClientPath}
                   </span>
                 ) : (
                   <span>Not yet selected</span>
@@ -69,9 +58,9 @@ const Settings = () => {
               <button
                 type="button"
                 className="btn-blue"
-                onClick={handlePathSelect}
+                onClick={handleClientPathSelect}
               >
-                {appConfig.tibia_client_path ? 'Change' : 'Select'}
+                {appConfig.tibiaClientPath ? 'Change' : 'Select'}
               </button>
             </div>
           </div>

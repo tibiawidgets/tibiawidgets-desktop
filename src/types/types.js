@@ -26,6 +26,6 @@ export type LootItem = {
 };
 
 export type JSONConfigFile = {
-  config_path: string,
-  tibia_client_path: string,
+  configPath: string,
+  tibiaClientPath: string,
 };

@@ -20,9 +20,12 @@ import {
   Tray,
   Menu,
   MenuItem,
+  dialog,
 } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import { JSONConfigFile } from 'types/types';
+import { HuntSession } from 'contexts/HuntSessionsContext';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import {
@@ -57,10 +60,7 @@ ipcMain.on('file-save', async (event, arg) => {
   event.reply('file-save', `File ${arg} saved`);
 });
 
-function createAppConfig(appDataPath: string) {
-  console.log(
-    `Creando archivos de configuracion de Tibia Widgets en ${appDataPath}`
-  );
+function setupAppConfig(appDataPath: string) {
   const tibiaClientDataPath = path.join(
     app.getPath('appData'),
     OS.platform() === 'win32'
@@ -69,41 +69,94 @@ function createAppConfig(appDataPath: string) {
     APP_TIBIA_CLIENT
   );
   const filenamePath = path.join(appDataPath, APP_CONFIG_FILE_NAME);
-  fs.mkdirSync(appDataPath);
+  if (!fs.existsSync(appDataPath)) {
+    console.log('Creating Tibia Widgets directory');
+    fs.mkdirSync(appDataPath);
+  }
   if (!fs.existsSync(filenamePath)) {
-    const initContent = {
-      config_path: filenamePath,
-      tibia_client_path: tibiaClientDataPath,
+    console.log(`Creating config files for Tibia Widgets in ${appDataPath}`);
+    const initContent: JSONConfigFile = {
+      configPath: filenamePath,
+      tibiaClientPath: tibiaClientDataPath,
     };
     fs.writeFileSync(filenamePath, JSON.stringify(initContent));
   }
 }
 
-function readAppConfig(appDataPath: string) {
-  const confitFilePath = path.join(appDataPath, APP_CONFIG_FILE_NAME);
-  const file = fs.readFileSync(confitFilePath, { encoding: 'utf8', flag: 'r' });
+function readAppConfig(appDataPath: string): JSONConfigFile {
+  const configFilePath = path.join(appDataPath, APP_CONFIG_FILE_NAME);
+  const file = fs.readFileSync(configFilePath, { encoding: 'utf8', flag: 'r' });
   return JSON.parse(file);
 }
 
-function getAppConfig() {
+function getAppConfig(): JSONConfigFile {
   const appDataPath = path.join(app.getPath('appData'), APP_NAME);
-  // create config file
-  if (!fs.existsSync(appDataPath)) {
-    createAppConfig(appDataPath);
-  }
+  setupAppConfig(appDataPath);
   // read config file
   const appConfig = readAppConfig(appDataPath);
   return appConfig;
+}
+
+function validateClientPath(): boolean {
+  const { tibiaClientPath, configPath } = getAppConfig();
+  const execPath = path.join(tibiaClientPath, 'Tibia.exe');
+  if (fs.existsSync(execPath)) {
+    console.log('Tibia.exe found');
+  } else {
+    console.log('Tibia Client Path incorrect. Cannot find Tibia.exe.');
+    const dirPath = dialog.showOpenDialogSync({
+      properties: ['openDirectory'],
+    });
+    console.log('Updating Tibia Client path');
+    const newAppConfig = {
+      configPath,
+      tibiaClientPath: dirPath ? dirPath[0] : '',
+    };
+    const configFilePath = path.join(
+      app.getPath('appData'),
+      APP_NAME,
+      APP_CONFIG_FILE_NAME
+    );
+    fs.writeFileSync(configFilePath, JSON.stringify(newAppConfig));
+  }
+  return true;
 }
 
 ipcMain.on('init', async (event, arg) => {
   console.log('Initializing app');
   console.log('Looking for Tibia Widgets Config File');
   const appConfig = getAppConfig();
-  // read config file
+  // reply to context
   event.reply('init', appConfig);
+});
 
-  // read logs (hunting sessions)
+ipcMain.on('getHuntSessions', async (event, arg) => {
+  if (validateClientPath()) {
+    const { tibiaClientPath } = getAppConfig();
+    const logPath = path.join(tibiaClientPath, 'packages/Tibia/log');
+    if (fs.existsSync(logPath)) {
+      const files = fs.readdirSync(logPath);
+      const jsonFiles = files.filter((file) => {
+        return file.match('.json') !== null;
+      });
+      const hunts: HuntSession[] = [];
+      jsonFiles.forEach((fileName) => {
+        const jsonFilePath = path.join(logPath, fileName);
+        const file = fs.readFileSync(jsonFilePath, {
+          encoding: 'utf8',
+          flag: 'r',
+        });
+        const hunt: HuntSession = {
+          name: fileName,
+          session: JSON.parse(file),
+        };
+        hunts.push(hunt);
+      });
+      event.reply('getHuntSessions', hunts);
+    }
+  } else {
+    console.log('Invalid client path');
+  }
 });
 
 if (process.env.NODE_ENV === 'production') {
