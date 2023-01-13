@@ -8,7 +8,9 @@
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
+import fs from 'fs';
 import path from 'path';
+import OS from 'os';
 import {
   app,
   BrowserWindow,
@@ -21,7 +23,6 @@ import {
 } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import toDataURL from '../tools/url2DataUrl';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import {
@@ -39,11 +40,70 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
+const APP_NAME = 'TibiaWidgets';
+const APP_CONFIG_FILE_NAME = 'tw.config.json';
+const OS_MAC_TIBIA_CLIENT_PATH =
+  '/CipSoft GmbH/TIbia/packages/Tibia/Contents/Resources/';
+const OS_WIN32_TIBIA_CLIENT_PATH = '/Local/';
+const APP_TIBIA_CLIENT = 'Tibia';
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
+});
+
+ipcMain.on('file-save', async (event, arg) => {
+  console.log('Saving File...');
+  event.reply('file-save', `File ${arg} saved`);
+});
+
+function createAppConfig(appDataPath: string) {
+  console.log(
+    `Creando archivos de configuracion de Tibia Widgets en ${appDataPath}`
+  );
+  const tibiaClientDataPath = path.join(
+    app.getPath('appData'),
+    OS.platform() === 'win32'
+      ? OS_WIN32_TIBIA_CLIENT_PATH
+      : OS_MAC_TIBIA_CLIENT_PATH,
+    APP_TIBIA_CLIENT
+  );
+  const filenamePath = path.join(appDataPath, APP_CONFIG_FILE_NAME);
+  fs.mkdirSync(appDataPath);
+  if (!fs.existsSync(filenamePath)) {
+    const initContent = {
+      config_path: filenamePath,
+      tibia_client_path: tibiaClientDataPath,
+    };
+    fs.writeFileSync(filenamePath, JSON.stringify(initContent));
+  }
+}
+
+function readAppConfig(appDataPath: string) {
+  const confitFilePath = path.join(appDataPath, APP_CONFIG_FILE_NAME);
+  const file = fs.readFileSync(confitFilePath, { encoding: 'utf8', flag: 'r' });
+  return JSON.parse(file);
+}
+
+function getAppConfig() {
+  const appDataPath = path.join(app.getPath('appData'), APP_NAME);
+  // create config file
+  if (!fs.existsSync(appDataPath)) {
+    createAppConfig(appDataPath);
+  }
+  // read config file
+  const appConfig = readAppConfig(appDataPath);
+  return appConfig;
+}
+
+ipcMain.on('init', async (event, arg) => {
+  console.log('Initializing app');
+  console.log('Looking for Tibia Widgets Config File');
+  const appConfig = getAppConfig();
+  // read config file
+  event.reply('init', appConfig);
+
+  // read logs (hunting sessions)
 });
 
 if (process.env.NODE_ENV === 'production') {
@@ -164,7 +224,6 @@ function getBoosted(list: CreatureListType): CreatureType {
 }
 
 function handlerPartyLootShare(menuItem: MenuItem) {
-  console.log('click on PArty loot share, show textarea', menuItem);
   createWindow();
 }
 
@@ -185,19 +244,6 @@ const addTray = () => {
     const creatures = await getCreatures();
     const boostedBoss = getBoosted(bosses);
     const boostedCreature = getBoosted(creatures);
-    const data = await toDataURL(boostedCreature.image_url);
-    const image = nativeImage.createFromBuffer(data);
-    const bossIcon = nativeImage
-      .createFromDataURL(
-        'https://static.tibia.com/images/global/header/monsters/cyclopssmith.gif'
-      )
-      .resize({ width: 80, height: 100 });
-    const creatureIcon = nativeImage
-      .createFromDataURL(boostedCreature.image_url)
-      .resize({ width: 16 });
-    const rashidIcon = nativeImage
-      .createFromPath(getAssetPath('Rashid.png'))
-      .resize({ width: 80, height: 100 });
     // Nota: su código contextMenu, Tooltip y Title ¡irá aquí!
     const contextMenu = Menu.buildFromTemplate([
       {

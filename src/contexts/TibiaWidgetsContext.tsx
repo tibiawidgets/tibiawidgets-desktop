@@ -1,19 +1,14 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  useCallback,
-} from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { JSONConfigFile } from 'types/types';
 
 type TibiaWidgetsContextValue = {
-  path: string;
+  appConfig: JSONConfigFile;
   directoryHandler: FileSystemDirectoryHandle | null;
   setDirectoryChange: (handler: FileSystemDirectoryHandle) => void;
 };
 
 const initialTibiaWidgetsContextValue: TibiaWidgetsContextValue = {
-  path: '',
+  appConfig: {} as JSONConfigFile,
   directoryHandler: null,
   setDirectoryChange: () => {},
 };
@@ -25,10 +20,23 @@ export const TibiaWidgetsContext = createContext<TibiaWidgetsContextValue>(
 const TibiaWidgetsContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [path, setPath] = useState(initialTibiaWidgetsContextValue.path);
+  const [appConfig, setAppConfig] = useState(
+    initialTibiaWidgetsContextValue.appConfig
+  );
   const [directoryHandler, setDirectoryHandler] = useState(
     initialTibiaWidgetsContextValue.directoryHandler
   );
+
+  const appInit = () => {
+    window.electron.ipcRenderer.on('init', (config) => {
+      setAppConfig(config as JSONConfigFile);
+    });
+    window.electron.ipcRenderer.sendMessage('init', []);
+  };
+
+  useEffect(() => {
+    appInit();
+  }, []);
 
   const setDirectoryChange = (
     newDirectoryHandler: FileSystemDirectoryHandle
@@ -41,7 +49,7 @@ const TibiaWidgetsContextProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
   const value = {
-    path,
+    appConfig,
     directoryHandler,
     setDirectoryChange,
   };

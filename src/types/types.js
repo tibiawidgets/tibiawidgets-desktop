@@ -24,3 +24,8 @@ export type LootItem = {
   Count: number,
   Name: string,
 };
+
+export type JSONConfigFile = {
+  config_path: string,
+  tibia_client_path: string,
+};

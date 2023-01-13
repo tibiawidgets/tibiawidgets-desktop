@@ -8,7 +8,6 @@ import TimeIcon from '../../../assets/time.svg';
 
 const HuntSessionSummary = ({ hunt }: { hunt: HuntSession }) => {
   const session: Session = hunt.session as Session;
-  console.log(session);
   return (
     <div className="w-full p-5 max-h-full overflow-y-scroll">
       <div className="card">
