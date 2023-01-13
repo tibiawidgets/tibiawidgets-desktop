@@ -24,8 +24,8 @@ import {
 } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import { JSONConfigFile } from 'types/types';
 import { HuntSession } from 'contexts/HuntSessionsContext';
+import { JSONConfigFile } from 'types/types';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import {

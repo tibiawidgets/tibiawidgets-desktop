@@ -1,5 +1,5 @@
 {
-  "description": "A foundation for scalable desktop apps",
+  "description": "Insights of Tibia Hunts",
   "keywords": [
     "electron",
     "boilerplate",
@@ -21,16 +21,10 @@
   },
   "license": "MIT",
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://electron-react-boilerplate.js.org"
+    "name": "Guillermo Beltran Gomez",
+    "email": "gbego91@gmail.com"
   },
   "contributors": [
-    {
-      "name": "Amila Welihinda",
-      "email": "amilajack@gmail.com",
-      "url": "https://github.com/amilajack"
-    }
   ],
   "main": "./src/main/main.ts",
   "scripts": {
@@ -117,7 +111,8 @@
     "path": "^0.12.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.3.0"
+    "react-router-dom": "^6.3.0",
+    "core-js": "^3.24.1"
   },
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
@@ -135,9 +130,9 @@
     "@typescript-eslint/parser": "^5.33.1",
     "autoprefixer": "^10.4.8",
     "browserslist-config-erb": "^0.0.3",
+    "file-loader": "^6.2.0",
     "chalk": "^4.1.2",
     "concurrently": "^7.3.0",
-    "core-js": "^3.24.1",
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.1",
     "css-minimizer-webpack-plugin": "^4.0.0",
@@ -160,7 +155,6 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.30.1",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^8.0.1",
     "identity-obj-proxy": "^3.0.0",
@@ -193,8 +187,8 @@
     "webpack-merge": "^5.8.0"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "Tibia Widgets",
+    "appId": "org.codiks.TibiaWidgets",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
@@ -232,6 +226,7 @@
       ]
     },
     "win": {
+      "outputDirectory": "%AppData%/TibiaWidgets",
       "target": [
         "nsis"
       ]
