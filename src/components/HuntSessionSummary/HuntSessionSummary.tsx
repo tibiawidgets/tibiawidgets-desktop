@@ -10,7 +10,7 @@ import XPIcon from '../../../assets/xp.png';
 const HuntSessionSummary = ({ hunt }: { hunt: HuntSession }) => {
   const session: Session = hunt.session as Session;
   return (
-    <div className="w-full p-5 max-h-full overflow-y-scroll">
+    <div className="w-full h-full">
       <div className="card">
         <div className="card-title">Hunt Information</div>
         <div className="card-content flex-col">

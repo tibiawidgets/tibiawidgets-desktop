@@ -33,6 +33,7 @@ import {
   getCreatures,
   getRashidLocation,
 } from '../services/tibia-api';
+import { copyHuntsFiles } from '../tools/files-manager';
 
 class AppUpdater {
   constructor() {
@@ -49,6 +50,7 @@ const OS_MAC_TIBIA_CLIENT_PATH =
   '/CipSoft GmbH/TIbia/packages/Tibia/Contents/Resources/';
 const OS_WIN32_TIBIA_CLIENT_PATH = '/Local/';
 const APP_TIBIA_CLIENT = 'Tibia';
+const APP_TIBIA_CLIENT_EXEC = 'Tibia.exe';
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
@@ -60,7 +62,7 @@ ipcMain.on('file-save', async (event, arg) => {
   event.reply('file-save', `File ${arg} saved`);
 });
 
-function setupAppConfig(appDataPath: string) {
+function setupAppFiles(appDataPath: string) {
   const tibiaClientDataPath = path.join(
     app.getPath('appData'),
     OS.platform() === 'win32'
@@ -76,6 +78,7 @@ function setupAppConfig(appDataPath: string) {
   if (!fs.existsSync(filenamePath)) {
     console.log(`Creating config files for Tibia Widgets in ${appDataPath}`);
     const initContent: JSONConfigFile = {
+      dirRoot: appDataPath,
       configPath: filenamePath,
       tibiaClientPath: tibiaClientDataPath,
     };
@@ -91,25 +94,27 @@ function readAppConfig(appDataPath: string): JSONConfigFile {
 
 function getAppConfig(): JSONConfigFile {
   const appDataPath = path.join(app.getPath('appData'), APP_NAME);
-  setupAppConfig(appDataPath);
+  const filenamePath = path.join(appDataPath, APP_CONFIG_FILE_NAME);
+  if (!fs.existsSync(appDataPath) || !fs.existsSync(filenamePath)) {
+    setupAppFiles(appDataPath);
+  }
   // read config file
   const appConfig = readAppConfig(appDataPath);
   return appConfig;
 }
 
-function validateClientPath(): boolean {
-  const { tibiaClientPath, configPath } = getAppConfig();
-  const execPath = path.join(tibiaClientPath, 'Tibia.exe');
-  if (fs.existsSync(execPath)) {
-    console.log('Tibia.exe found');
-  } else {
+function validateClientPath(tibiaClientPath: string): boolean {
+  const execPath = path.join(tibiaClientPath, APP_TIBIA_CLIENT_EXEC);
+  console.log(execPath);
+  if (!fs.existsSync(execPath)) {
     console.log('Tibia Client Path incorrect. Cannot find Tibia.exe.');
     const dirPath = dialog.showOpenDialogSync({
       properties: ['openDirectory'],
     });
     console.log('Updating Tibia Client path');
+    const appConfig = getAppConfig();
     const newAppConfig = {
-      configPath,
+      ...appConfig,
       tibiaClientPath: dirPath ? dirPath[0] : '',
     };
     const configFilePath = path.join(
@@ -126,13 +131,18 @@ ipcMain.on('init', async (event, arg) => {
   console.log('Initializing app');
   console.log('Looking for Tibia Widgets Config File');
   const appConfig = getAppConfig();
+  console.log(appConfig);
+  validateClientPath(appConfig.tibiaClientPath);
+  if (appConfig.dirRoot) {
+    copyHuntsFiles(appConfig.tibiaClientPath, appConfig.dirRoot);
+  }
   // reply to context
   event.reply('init', appConfig);
 });
 
 ipcMain.on('getHuntSessions', async (event, arg) => {
-  if (validateClientPath()) {
-    const { tibiaClientPath } = getAppConfig();
+  const { tibiaClientPath } = getAppConfig();
+  if (tibiaClientPath) {
     const logPath = path.join(tibiaClientPath, 'packages/Tibia/log');
     if (fs.existsSync(logPath)) {
       const files = fs.readdirSync(logPath);
@@ -199,8 +209,8 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1180,
-    height: 728,
+    width: 1200,
+    height: 980,
     resizable: true,
     icon: getAssetPath('icon.png'),
     webPreferences: {
@@ -235,7 +245,7 @@ const createWindow = async () => {
   // Open urls in the user's browser
   mainWindow.webContents.setWindowOpenHandler((edata) => {
     shell.openExternal(edata.url);
-    return { action: 'deny' };
+    return { action: 'allow' };
   });
 
   // Remove this if your app does not use auto updates
@@ -330,11 +340,11 @@ app
   .whenReady()
   .then(() => {
     // createWindow();
-    addTray();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
       if (mainWindow === null) createWindow();
     });
+    addTray();
   })
   .catch(console.log);

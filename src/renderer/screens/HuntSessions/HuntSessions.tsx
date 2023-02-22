@@ -1,5 +1,6 @@
 import { HuntSession, useHuntSessions } from 'contexts/HuntSessionsContext';
 import { SyntheticEvent, useState } from 'react';
+import Chart from 'components/Chart/Chart';
 import { useTibiaWidgetsContext } from '../../../contexts/TibiaWidgetsContext';
 import HuntSessionSummary from '../../../components/HuntSessionSummary/HuntSessionSummary';
 import './HuntSessions.scss';
@@ -18,16 +19,19 @@ const HuntSessions = () => {
     setSelected(selectedHunt);
   };
   return (
-    <div className="container overflow-hidden">
+    <div className="w-full">
       <h1 className="section-title">Hunt Sessions</h1>
       <p className="my-5">
         Revisit your hunting sessions, analyze and improve your hunt.
       </p>
+      <div>
+        <Chart />
+      </div>
       {hunts ? (
-        <div>
+        <div className="flex flex-col">
           <h2 className="text-lg font-bold">Yor hunting sessions</h2>
-          <div className="flex h-auto ">
-            <div className="border-2 border-black rounded p-2 mr-1 max-w-sm min-w-60 flex-shrink-0 overflow-y-scroll">
+          <div className="flex">
+            <div className="border-2 border-black rounded p-2 mr-1 max-w-sm min-w-60 flex-shrink-0 overflow-y-scroll h-full">
               {hunts.map((hunt: HuntSession) => (
                 <button
                   type="button"
@@ -41,7 +45,7 @@ const HuntSessions = () => {
                 </button>
               ))}
             </div>
-            <div className="border-2 border-black rounded p-2 w-1/2 flex flex-grow justify-center items-center visualizer">
+            <div className="border-2 border-black rounded p-2 w-1/2 flex flex-grow justify-center items-center visualizer overflow-y-scroll">
               {selected.session ? (
                 <HuntSessionSummary hunt={selected} />
               ) : (

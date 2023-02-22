@@ -1,31 +1,34 @@
 export type Session = {
-  Balance: string,
-  Damage: string,
-  'Damage/h': string,
-  Healing: string,
-  'Healing/h': string,
-  'Killed Monsters': KilledMonsters[],
-  Loot: string,
-  'Looted Items': LootItem[],
-  'Session end': string,
-  'Session length': string,
-  'Session start': string,
-  Supplies: string,
-  'XP Gain': string,
-  'XP/h': string,
+  balance: string,
+  damage: string,
+  damagePerHour: string,
+  healing: string,
+  healingPerHour: string,
+  killedMonsters: KilledMonster[],
+  loot: string,
+  lootedItems: LootItem[],
+  session: {
+    end: string,
+    duration: string,
+    start: string,
+  },
+  supplies: string,
+  xpGain: string,
+  xpPerHour: string,
 };
 
-export type KilledMonsters = {
-  Count: number,
-  Name: string,
+export type KilledMonster = {
+  count: number,
+  name: string,
 };
 
 export type LootItem = {
-  Count: number,
-  Name: string,
+  count: number,
+  name: string,
 };
 
 export type JSONConfigFile = {
   configPath: string,
   tibiaClientPath: string,
+  dirRoot: string,
 };
