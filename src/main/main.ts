@@ -62,7 +62,9 @@ ipcMain.on('file-save', async (event, arg) => {
   event.reply('file-save', `File ${arg} saved`);
 });
 
+// Create tw.config.json file
 function setupAppFiles(appDataPath: string) {
+  // provide a default Tibia path "../AppData/Local/Tibia" for Windows
   const tibiaClientDataPath = path.join(
     app.getPath('appData'),
     OS.platform() === 'win32'
@@ -105,37 +107,41 @@ function getAppConfig(): JSONConfigFile {
 
 function validateClientPath(tibiaClientPath: string): boolean {
   const execPath = path.join(tibiaClientPath, APP_TIBIA_CLIENT_EXEC);
-  console.log(execPath);
   if (!fs.existsSync(execPath)) {
     console.log('Tibia Client Path incorrect. Cannot find Tibia.exe.');
-    const dirPath = dialog.showOpenDialogSync({
-      properties: ['openDirectory'],
-    });
-    console.log('Updating Tibia Client path');
-    const appConfig = getAppConfig();
-    const newAppConfig = {
-      ...appConfig,
-      tibiaClientPath: dirPath ? dirPath[0] : '',
-    };
-    const configFilePath = path.join(
-      app.getPath('appData'),
-      APP_NAME,
-      APP_CONFIG_FILE_NAME
-    );
-    fs.writeFileSync(configFilePath, JSON.stringify(newAppConfig));
+    return false;
   }
   return true;
+}
+
+function updateClientPath() {
+  const dirPath = dialog.showOpenDialogSync({
+    properties: ['openDirectory'],
+  });
+  console.log('Updating Tibia Client path');
+  const appConfig = getAppConfig();
+  const newAppConfig = {
+    ...appConfig,
+    tibiaClientPath: dirPath ? dirPath[0] : '',
+  };
+  const configFilePath = path.join(
+    app.getPath('appData'),
+    APP_NAME,
+    APP_CONFIG_FILE_NAME
+  );
+  fs.writeFileSync(configFilePath, JSON.stringify(newAppConfig));
 }
 
 ipcMain.on('init', async (event, arg) => {
   console.log('Initializing app');
   console.log('Looking for Tibia Widgets Config File');
-  const appConfig = getAppConfig();
-  console.log(appConfig);
-  validateClientPath(appConfig.tibiaClientPath);
-  if (appConfig.dirRoot) {
-    copyHuntsFiles(appConfig.tibiaClientPath, appConfig.dirRoot);
+  let appConfig = getAppConfig();
+  if (!validateClientPath(appConfig.tibiaClientPath)) {
+    updateClientPath();
+    appConfig = getAppConfig();
   }
+  // Copy hunt files
+  copyHuntsFiles(appConfig.tibiaClientPath, appConfig.dirRoot);
   // reply to context
   event.reply('init', appConfig);
 });

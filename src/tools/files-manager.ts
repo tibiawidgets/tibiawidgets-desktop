@@ -38,11 +38,11 @@ export function makeDirectoryCopy(fromPath: string, toPath: string) {
     fs.mkdirSync(toPath);
   }
   const files = fs.readdirSync(fromPath);
-  files.forEach((file) => {
-    const absFromPath = path.join(fromPath, file);
-    const absToPath = path.join(toPath, file);
-    fs.readFileSync(absFromPath);
-    fs.writeFile(file, absToPath, 'utf-8', (err) => {
+  files.forEach((fileName) => {
+    const absFromPath = path.join(fromPath, fileName);
+    const absToPath = path.join(toPath, fileName);
+    const fileData = fs.readFileSync(absFromPath);
+    fs.writeFile(absToPath, fileData, 'utf-8', (err) => {
       if (err) throw err;
       console.log('The file has been saved!');
     });
@@ -108,10 +108,11 @@ export function copyHuntsFiles(
   tibiaClientPath: string,
   tibiaWidgetsPath: string
 ) {
-  console.log('Copying hunt files');
-  const absTibiaClientHuntsPath = tibiaClientPath + PATH_HUNTS_TIBIA_CLIENT;
-  const absTibiaWidgetsHuntsPath = tibiaWidgetsPath + PATH_HUNTS_TIBIA_WIDGETS;
-  if (!fs.existsSync(absTibiaWidgetsHuntsPath)) {
-    makeDirectoryCopy(absTibiaClientHuntsPath, absTibiaWidgetsHuntsPath);
+  const fromPath = path.join(tibiaClientPath, PATH_HUNTS_TIBIA_CLIENT);
+  const toPath = path.join(tibiaWidgetsPath, PATH_HUNTS_TIBIA_WIDGETS);
+  if (!fs.existsSync(toPath)) {
+    console.log('Copying hunt files');
+    console.log({ fromPath, toPath });
+    makeDirectoryCopy(fromPath, toPath);
   }
 }
