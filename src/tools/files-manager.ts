@@ -12,8 +12,8 @@ export function writeFile() {}
  * Hunts
  */
 
-const PATH_HUNTS_TIBIA_CLIENT = '/packages/Tibia/log';
-const PATH_HUNTS_TIBIA_WIDGETS = '/hunt_sessions';
+export const PATH_HUNTS_TIBIA_CLIENT = '/packages/Tibia/log';
+export const PATH_HUNTS_TIBIA_WIDGETS = '/hunt_sessions';
 
 export function readHuntFiles() {}
 

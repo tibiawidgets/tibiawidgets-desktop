@@ -5,11 +5,12 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
+import { Session } from 'types/types';
 import { useTibiaWidgetsContext } from './TibiaWidgetsContext';
 
 export type HuntSession = {
   name: string;
-  session?: object;
+  session?: Session;
 };
 
 export type HuntSessionsContextValue = {

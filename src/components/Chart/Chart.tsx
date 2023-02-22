@@ -11,6 +11,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import { faker } from '@faker-js/faker';
 import './Chart.scss';
+import { useHuntSessions } from 'contexts/HuntSessionsContext';
 
 ChartJS.register(
   CategoryScale,
@@ -74,9 +75,43 @@ export const data = {
 };
 
 const Chart = () => {
+  const { hunts } = useHuntSessions();
+  const dataSet = {
+    labels: hunts.map((hunt) => hunt.session?.session.start),
+    datasets: [
+      {
+        label: 'XP Gain',
+        data: hunts.map((hunt) => hunt.xpGain),
+        borderColor: 'rgba(255, 99, 132, 1)',
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        fill: true,
+      },
+      {
+        label: 'Loot',
+        data: hunts.map((hunt) => hunt.session?.loot),
+        borderColor: 'rgba(54, 162, 235, 1)',
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        fill: true,
+      },
+      {
+        label: 'Damage',
+        data: hunts.map((hunt) => hunt.session?.damage),
+        borderColor: 'rgba(255, 206, 86, 1)',
+        backgroundColor: 'rgba(255, 206, 86, 0.2)',
+        fill: true,
+      },
+      {
+        label: 'Healing',
+        data: hunts.map((hunt) => hunt.session?.healing),
+        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        fill: true,
+      },
+    ],
+  };
   return (
     <div className="chart">
-      <Line datasetIdKey="id" options={options} data={data} />
+      <Line datasetIdKey="id" options={options} data={dataSet} />
     </div>
   );
 };

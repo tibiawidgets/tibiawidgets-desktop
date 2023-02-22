@@ -22,26 +22,24 @@ const HuntSessionSummary = ({ hunt }: { hunt: HuntSession }) => {
                 width="56px"
                 className="mr-5"
               />
-              {session['Session length']}
+              {session.session.duration}
             </p>
             <p
               className={`session-balance ${
-                parseInt(session.Balance, 10) > 0
-                  ? 'balance-profit'
-                  : 'balance-waste'
+                session.balance > 0 ? 'balance-profit' : 'balance-waste'
               }`}
             >
               <img alt="balance" width="60px" src={CoinsImage} />
-              {session.Balance}
+              {session.balance}
             </p>
           </div>
           <div className="flex flex-col ">
             <div className="flex justify-center">
               <img alt="xp" width="150px" src={XPIcon} />
               <div className="flex flex-col items-end">
-                <span className="mt-5 mb-2 text-6xl">{session['XP Gain']}</span>
+                <span className="mt-5 mb-2 text-6xl">{session.xpGain}</span>
                 <span className="text-slate-500">
-                  @ {session['XP/h']} exp/hour
+                  @ {session.xpPerHour} exp/hour
                 </span>
               </div>
             </div>
@@ -53,16 +51,16 @@ const HuntSessionSummary = ({ hunt }: { hunt: HuntSession }) => {
         <div className="card-content">
           <div className="flex flex-col w-1/2 justify-center items-center">
             <img className="w-20 icon" src={AttackIcon} alt="heal icon" />
-            <span className="mt-5 mb-2 text-4xl">{session.Damage}</span>
+            <span className="mt-5 mb-2 text-4xl">{session.damage}</span>
             <span className="text-slate-500">
-              @ {session['Damage/h']} damage/hour
+              @ {session.damagePerHour} damage/hour
             </span>
           </div>
           <div className="flex flex-col w-1/2 justify-center items-center">
             <img className="w-20 icon" src={HealIcon} alt="heal icon" />
-            <span className="mt-5 mb-2 text-4xl">{session.Healing}</span>
+            <span className="mt-5 mb-2 text-4xl">{session.healing}</span>
             <span className="text-slate-500">
-              @ {session['Healing/h']} healing/hour
+              @ {session.healingPerHour} healing/hour
             </span>
           </div>
         </div>
@@ -71,10 +69,10 @@ const HuntSessionSummary = ({ hunt }: { hunt: HuntSession }) => {
         <div className="card-title">Killed Monsters</div>
         <div className="card-content">
           <div className="monsters-container grid grid-cols-2 gap-2 w-full grid-flow-dense">
-            {session['Killed Monsters'].map((monster) => (
-              <div key={monster.Name}>
-                <span className="font-bold">{monster.Count}x</span>{' '}
-                {monster.Name}
+            {session.killedMonsters.map((monster) => (
+              <div key={monster.name}>
+                <span className="font-bold">{monster.count}x</span>{' '}
+                {monster.name}
               </div>
             ))}
           </div>
@@ -86,16 +84,16 @@ const HuntSessionSummary = ({ hunt }: { hunt: HuntSession }) => {
           <div className="flex items-center">
             <img alt="balance" width="60px" src={CoinsImage} />
             <span className="outlined-title text-yellow-500 text-xl ml-5">
-              {session.Loot}
+              {session.loot}
             </span>
           </div>
         </div>
         <div className="card-content">
           <div className="monsters-container grid grid-cols-2 gap-2 w-full grid-flow-dense">
-            {session['Looted Items'].map((lootItem) => (
-              <div key={lootItem.Name}>
-                <span className="font-bold">{lootItem.Count}x</span>{' '}
-                {lootItem.Name}
+            {session.lootedItems.map((lootItem) => (
+              <div key={lootItem.name}>
+                <span className="font-bold">{lootItem.count}x</span>{' '}
+                {lootItem.name}
               </div>
             ))}
           </div>

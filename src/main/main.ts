@@ -33,7 +33,10 @@ import {
   getCreatures,
   getRashidLocation,
 } from '../services/tibia-api';
-import { copyHuntsFiles } from '../tools/files-manager';
+import {
+  copyHuntsFiles,
+  PATH_HUNTS_TIBIA_WIDGETS,
+} from '../tools/files-manager';
 
 class AppUpdater {
   constructor() {
@@ -147,9 +150,10 @@ ipcMain.on('init', async (event, arg) => {
 });
 
 ipcMain.on('getHuntSessions', async (event, arg) => {
-  const { tibiaClientPath } = getAppConfig();
-  if (tibiaClientPath) {
-    const logPath = path.join(tibiaClientPath, 'packages/Tibia/log');
+  const { dirRoot } = getAppConfig();
+  const huntsPath = path.join(dirRoot, PATH_HUNTS_TIBIA_WIDGETS);
+  if (huntsPath) {
+    const logPath = path.join(huntsPath);
     if (fs.existsSync(logPath)) {
       const files = fs.readdirSync(logPath);
       const jsonFiles = files.filter((file) => {
