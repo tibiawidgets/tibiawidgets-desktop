@@ -1,20 +1,20 @@
 export type Session = {
-  balance: string,
-  damage: string,
-  damagePerHour: string,
-  healing: string,
-  healingPerHour: string,
+  balance: number,
+  damage: number,
+  damagePerHour: number,
+  healing: number,
+  healingPerHour: number,
   killedMonsters: KilledMonster[],
-  loot: string,
+  loot: number,
   lootedItems: LootItem[],
   session: {
     end: string,
     duration: string,
     start: string,
   },
-  supplies: string,
-  xpGain: string,
-  xpPerHour: string,
+  supplies: number,
+  xpGain: number,
+  xpPerHour: number,
 };
 
 export type KilledMonster = {
