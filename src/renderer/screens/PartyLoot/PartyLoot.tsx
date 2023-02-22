@@ -47,10 +47,7 @@ const PartyLoot = () => {
               >
                 Calculate
               </button>
-              <button
-                type="button"
-                className="party-loot-button hover:bg-indigo-600 hover:text-white"
-              >
+              <button type="button" className="party-loot-button" disabled>
                 Save party session
               </button>
             </div>

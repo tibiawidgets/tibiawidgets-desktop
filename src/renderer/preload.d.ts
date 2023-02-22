@@ -1,4 +1,5 @@
 import { Channels } from 'main/preload';
+import { PayPal } from 'types/types';
 
 declare global {
   interface Window {
@@ -12,6 +13,7 @@ declare global {
         once(channel: string, func: (...args: unknown[]) => void): void;
       };
     };
+    paypal: PayPal;
   }
 }
 

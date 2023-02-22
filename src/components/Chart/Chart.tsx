@@ -52,27 +52,6 @@ export const options = {
     },
   },
 };
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      yAxisID: 'y',
-    },
-    {
-      label: 'Dataset 2',
-      data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-      yAxisID: 'y1',
-    },
-  ],
-};
 
 const Chart = () => {
   const { hunts } = useHuntSessions();
@@ -81,7 +60,7 @@ const Chart = () => {
     datasets: [
       {
         label: 'XP Gain',
-        data: hunts.map((hunt) => hunt.xpGain),
+        data: hunts.map((hunt) => hunt.session?.xpGain),
         borderColor: 'rgba(255, 99, 132, 1)',
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
         fill: true,
@@ -98,13 +77,6 @@ const Chart = () => {
         data: hunts.map((hunt) => hunt.session?.damage),
         borderColor: 'rgba(255, 206, 86, 1)',
         backgroundColor: 'rgba(255, 206, 86, 0.2)',
-        fill: true,
-      },
-      {
-        label: 'Healing',
-        data: hunts.map((hunt) => hunt.session?.healing),
-        borderColor: 'rgba(75, 192, 192, 1)',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
         fill: true,
       },
     ],

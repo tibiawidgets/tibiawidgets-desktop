@@ -1,3 +1,5 @@
+import PaypalButton from '../../components/PaypalButton';
+
 const Home = () => {
   return (
     <div className="container">
@@ -47,7 +49,7 @@ const Home = () => {
           </div>
           <div className="shadow-gray-400 shadow-md border-solid rounded-md min-w-1/4 max-w-sm mt-10 p-5">
             <div className="">
-              <span className="text-center font-bold">Premium features:</span>
+              <span className="text-center font-bold">Donate:</span>
               <ul className="text-md list-disc p-5">
                 <li className="list-item">
                   Save your client config & minimap in the cloud
@@ -63,16 +65,11 @@ const Home = () => {
             </div>
             <span className="flex justify-evenly my-5">
               <span className="text-3xl self-center">Only</span>{' '}
-              <span className="text-6xl">$2</span>
+              <span className="text-6xl">$1</span>
               <span className="text-2x1 self-end">/Month</span>
             </span>
-            <div className="mt-10 text-md flex justify-center flex-col">
-              <button
-                type="button"
-                className="border-yellow-500 bg-yellow-300 rounded-md p-5 font-bold text-indigo-600 hover:bg-yellow-500 hover:text-white"
-              >
-                JOIN NOW!
-              </button>
+            <div className="mt-10 text-md flex justify-center text-xl text-gray-400">
+              Coming Very Soon...
             </div>
           </div>
         </div>
