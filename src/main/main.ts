@@ -37,6 +37,7 @@ import {
   copyHuntsFiles,
   PATH_HUNTS_TIBIA_WIDGETS,
 } from '../tools/files-manager';
+import MongoDB from '../database/db';
 
 class AppUpdater {
   constructor() {
@@ -47,6 +48,11 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
+const db = new MongoDB(
+  'mongodb+srv://gbego91:mhjStMjwRyB1owMy@tibia-widgets.ri0t2zs.mongodb.net/tibia-widgets',
+  'tibia-widgets',
+  'hunt-sessions'
+);
 const APP_NAME = 'TibiaWidgets';
 const APP_CONFIG_FILE_NAME = 'tw.config.json';
 const OS_MAC_TIBIA_CLIENT_PATH =
@@ -246,6 +252,14 @@ const createWindow = async () => {
   });
 
   mainWindow.on('closed', () => {
+    // Close the MongoDB connection when the window is closed.
+    db.disconnect()
+      .then(() => {
+        console.log('Disconnected from MongoDB');
+      })
+      .catch((err) => {
+        console.error(err);
+      });
     mainWindow = null;
   });
 
@@ -346,11 +360,17 @@ const addTray = () => {
   });
 };
 
+app.on('ready', async () => {
+  const client = await db.connect();
+  const collection = await db.getAllHuntSessionsByUserId(2);
+  global.db = client;
+});
+
 app
   .whenReady()
   .then(() => {
     // createWindow();
-    app.on('activate', () => {
+    app.on('activate', async () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
       if (mainWindow === null) createWindow();
