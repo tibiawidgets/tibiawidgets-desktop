@@ -1,11 +1,14 @@
 import { HuntSession, useHuntSessions } from 'contexts/HuntSessionsContext';
 import { SyntheticEvent, useState } from 'react';
+import Dialog from 'components/Dialog';
+import SelectMenu from 'components/SelectMenu';
 import Chart from 'components/Chart/Chart';
 import { useTibiaWidgetsContext } from '../../../contexts/TibiaWidgetsContext';
 import HuntSessionSummary from '../../../components/HuntSessionSummary/HuntSessionSummary';
 import './HuntSessions.scss';
 
 const HuntSessions = () => {
+  const [showCharDialog, setShowCharDialog] = useState(false);
   const [selected, setSelected] = useState<HuntSession>({ name: '' });
   const { appConfig } = useTibiaWidgetsContext();
   const { hunts } = useHuntSessions();
@@ -18,9 +21,19 @@ const HuntSessions = () => {
     const selectedHunt = getSelectedHunt(selectedName || '');
     setSelected(selectedHunt);
   };
+
+  const onSubmitChar = () => {};
   return (
     <div className="w-full">
-      <h1 className="section-title">Hunt Sessions</h1>
+      <h1 className="section-title mb-2">Hunt Sessions</h1>
+      <button
+        type="button"
+        className="px-4 py-2 rounded bg-indigo-500 hover:bg-indigo-700 text-white"
+        onClick={() => setShowCharDialog(true)}
+      >
+        + Add character
+      </button>
+      <SelectMenu options={['Sir Paeris']} onSelect={(e) => console.log(e)} />
       <p className="my-5">
         Revisit your hunting sessions, analyze and improve your hunt.
       </p>
@@ -57,6 +70,24 @@ const HuntSessions = () => {
       ) : (
         <span>You haven&apos;t selected your Tibia installation path.</span>
       )}
+      <Dialog
+        isOpen={showCharDialog}
+        title="Add character"
+        onClose={() => setShowCharDialog(false)}
+        onSubmit={onSubmitChar}
+      >
+        <div className="mb-4">
+          <label className="block font-bold mb-2" htmlFor="character">
+            Character
+            <input
+              className="border rounded w-full py-2 px-3"
+              id="character"
+              name="character"
+              type="text"
+            />
+          </label>
+        </div>
+      </Dialog>
     </div>
   );
 };

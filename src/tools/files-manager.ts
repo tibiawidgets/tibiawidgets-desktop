@@ -4,18 +4,12 @@ import fs from 'fs';
 import path from 'path';
 import { Session } from 'types/types';
 
-export function readFile() {}
-
-export function writeFile() {}
-
 /**
  * Hunts
  */
 
 export const PATH_HUNTS_TIBIA_CLIENT = '/packages/Tibia/log';
 export const PATH_HUNTS_TIBIA_WIDGETS = '/hunt_sessions';
-
-export function readHuntFiles() {}
 
 export function filterByExtension(files: string[], extensions: string[]) {
   return files.filter((file) => {

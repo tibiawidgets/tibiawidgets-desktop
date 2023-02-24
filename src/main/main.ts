@@ -224,7 +224,7 @@ const createWindow = async () => {
   }
 
   mainWindow = new BrowserWindow({
-    show: false,
+    show: true,
     width: 1600,
     height: 980,
     resizable: true,
