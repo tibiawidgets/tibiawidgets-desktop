@@ -1,11 +1,11 @@
 import { HuntSession, useHuntSessions } from 'contexts/HuntSessionsContext';
 import { SyntheticEvent, useState } from 'react';
-import Dialog from 'components/Dialog';
 import SelectMenu from 'components/SelectMenu';
 import Chart from 'components/Chart/Chart';
-import { useTibiaWidgetsContext } from '../../../contexts/TibiaWidgetsContext';
-import HuntSessionSummary from '../../../components/HuntSessionSummary/HuntSessionSummary';
+import { CharDialog } from 'components/CharDialog';
+import HuntSessionSummary from 'components/HuntSessionSummary/HuntSessionSummary';
 import './HuntSessions.scss';
+import { useTibiaWidgetsContext } from 'contexts/TibiaWidgetsContext';
 
 const HuntSessions = () => {
   const [showCharDialog, setShowCharDialog] = useState(false);
@@ -22,7 +22,6 @@ const HuntSessions = () => {
     setSelected(selectedHunt);
   };
 
-  const onSubmitChar = () => {};
   return (
     <div className="w-full">
       <h1 className="section-title mb-2">Hunt Sessions</h1>
@@ -33,7 +32,14 @@ const HuntSessions = () => {
       >
         + Add character
       </button>
-      <SelectMenu options={['Sir Paeris']} onSelect={(e) => console.log(e)} />
+      <SelectMenu
+        options={[
+          { key: '1', value: 'All' },
+          { key: '2', value: 'Unnassigned' },
+          { key: '3', value: 'Sir Paeris' },
+        ]}
+        onSelect={(e) => console.log(e)}
+      />
       <p className="my-5">
         Revisit your hunting sessions, analyze and improve your hunt.
       </p>
@@ -70,24 +76,11 @@ const HuntSessions = () => {
       ) : (
         <span>You haven&apos;t selected your Tibia installation path.</span>
       )}
-      <Dialog
+      <CharDialog
         isOpen={showCharDialog}
-        title="Add character"
         onClose={() => setShowCharDialog(false)}
-        onSubmit={onSubmitChar}
-      >
-        <div className="mb-4">
-          <label className="block font-bold mb-2" htmlFor="character">
-            Character
-            <input
-              className="border rounded w-full py-2 px-3"
-              id="character"
-              name="character"
-              type="text"
-            />
-          </label>
-        </div>
-      </Dialog>
+        onSuccess={() => setShowCharDialog(false)}
+      />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.scss';
 import { HuntSessionsContextProvider } from 'contexts/HuntSessionsContext';
-import { TibiaWidgetsContextProvider } from '../contexts/TibiaWidgetsContext';
+import { TibiaWidgetsContextProvider } from 'contexts/TibiaWidgetsContext';
 import Home from './screens/Home';
 import Drawer from '../components/Drawer/Drawer';
 import Settings from './screens/Settings/Settings';

@@ -32,6 +32,7 @@ import {
   getBosses,
   getCreatures,
   getRashidLocation,
+  getCharacterInformation,
 } from '../services/tibia-api';
 import {
   copyHuntsFiles,
@@ -331,6 +332,7 @@ const addTray = () => {
     const creatures = await getCreatures();
     const boostedBoss = getBoosted(bosses);
     const boostedCreature = getBoosted(creatures);
+    const char = getCharacterInformation('Sir Paeris');
     // Nota: su código contextMenu, Tooltip y Title ¡irá aquí!
     const contextMenu = Menu.buildFromTemplate([
       {

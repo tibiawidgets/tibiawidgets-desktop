@@ -49,7 +49,7 @@ const Home = () => {
           </div>
           <div className="shadow-gray-400 shadow-md border-solid rounded-md min-w-1/4 max-w-sm mt-10 p-5">
             <div className="">
-              <span className="text-center font-bold">Donate:</span>
+              <span className="text-center font-bold">Premium:</span>
               <ul className="text-md list-disc p-5">
                 <li className="list-item">
                   Save your client config & minimap in the cloud
