@@ -48,7 +48,9 @@ const HuntSessions = () => {
       </div>
       {hunts ? (
         <div className="flex flex-col">
-          <h2 className="text-lg font-bold">Your hunting sessions</h2>
+          <h2 className="text-lg font-bold">
+            Your hunting sessions ({hunts.length})
+          </h2>
           <div className="flex">
             <div className="border-2 border-black rounded p-2 mr-1 max-w-sm min-w-60 flex-shrink-0 overflow-y-scroll h-full">
               {hunts.map((hunt: HuntSession) => (

@@ -156,6 +156,53 @@ ipcMain.on('init', async (event, arg) => {
   event.reply('init', appConfig);
 });
 
+function removeDuplicatesBySessionStart(
+  huntSessions: HuntSession[]
+): HuntSession[] {
+  const sessionStartMap: { [key: string]: HuntSession[] } = {};
+
+  huntSessions.forEach((huntSession) => {
+    if (
+      huntSession.session &&
+      huntSession.session.session &&
+      huntSession.session.session.start
+    ) {
+      const sessionStart = huntSession.session.session.start;
+
+      if (!sessionStartMap[sessionStart]) {
+        sessionStartMap[sessionStart] = [];
+      }
+
+      sessionStartMap[sessionStart].push(huntSession);
+    }
+  });
+
+  const nonDuplicatedSessionLists: HuntSession[] = Object.values(
+    sessionStartMap
+  )
+    .filter((sessionList) => sessionList.length === 1)
+    .map((sessionList) => sessionList[0]);
+
+  const mergedSessionLists: HuntSession[] = Object.values(sessionStartMap)
+    .filter((sessionList) => sessionList.length > 1)
+    .map((sessionList) => {
+      const mergedSession = { ...sessionList[0] };
+
+      sessionList.forEach((huntSession) => {
+        if (huntSession.session && huntSession.session.session) {
+          mergedSession.session = {
+            ...mergedSession.session,
+            ...huntSession.session,
+          };
+        }
+      });
+
+      return mergedSession;
+    });
+
+  return [...nonDuplicatedSessionLists, ...mergedSessionLists];
+}
+
 ipcMain.on('getHuntSessions', async (event, arg) => {
   const { dirRoot } = getAppConfig();
   const huntsPath = path.join(dirRoot, PATH_HUNTS_TIBIA_WIDGETS);
@@ -166,7 +213,7 @@ ipcMain.on('getHuntSessions', async (event, arg) => {
       const jsonFiles = files.filter((file) => {
         return file.match('.json') !== null;
       });
-      const hunts: HuntSession[] = [];
+      let hunts: HuntSession[] = [];
       jsonFiles.forEach((fileName) => {
         const jsonFilePath = path.join(logPath, fileName);
         const file = fs.readFileSync(jsonFilePath, {
@@ -179,6 +226,10 @@ ipcMain.on('getHuntSessions', async (event, arg) => {
         };
         hunts.push(hunt);
       });
+
+      // remove duplicates by starting date+time
+      hunts = removeDuplicatesBySessionStart(hunts);
+
       event.reply('getHuntSessions', hunts);
     }
   } else {
