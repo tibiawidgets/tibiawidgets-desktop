@@ -1,6 +1,5 @@
 import { HuntSession, useHuntSessions } from 'contexts/HuntSessionsContext';
 import { SyntheticEvent, useState } from 'react';
-import SelectMenu from 'components/SelectMenu';
 import Chart from 'components/Chart/Chart';
 import { CharDialog } from 'components/CharDialog';
 import HuntSessionSummary from 'components/HuntSessionSummary/HuntSessionSummary';
@@ -60,11 +59,11 @@ const HuntSessions = () => {
         <Chart />
       </div>
       {hunts ? (
-        <div className="flex flex-col">
+        <div className="flex flex-col h-96">
           <h2 className="text-lg font-bold">
             Your hunting sessions ({hunts.length})
           </h2>
-          <div className="flex">
+          <div className="flex overflow-y-hidden">
             <div className="border-2 border-black rounded p-2 mr-1 max-w-sm min-w-60 flex-shrink-0 overflow-y-scroll h-full">
               {hunts.map((hunt: HuntSession) => (
                 <button

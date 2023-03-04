@@ -15,7 +15,7 @@ export default function App() {
         <div className=" h-full flex">
           <Router>
             <Drawer />
-            <div className="flex px-5 py-10 bg-slate-100 flex-grow">
+            <div className="flex px-5 py-10 bg-slate-100 flex-grow overflow-y-scroll">
               <Routes>
                 <Route path="/party-loot" element={<PartyLoot />} />
                 <Route path="/settings" element={<Settings />} />

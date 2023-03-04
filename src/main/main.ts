@@ -25,7 +25,7 @@ import {
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { HuntSession } from 'contexts/HuntSessionsContext';
-import { JSONConfigFile } from 'types/types';
+import { CloudStatusType, JSONConfigFile } from 'types/types';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import {
@@ -39,6 +39,8 @@ import {
   PATH_HUNTS_TIBIA_WIDGETS,
 } from '../tools/files-manager';
 import MongoDB from '../database/db';
+
+const CLOUD_STATUS: CloudStatusType = 'off';
 
 class AppUpdater {
   constructor() {
@@ -70,6 +72,11 @@ ipcMain.on('ipc-example', async (event, arg) => {
 ipcMain.on('file-save', async (event, arg) => {
   console.log('Saving File...');
   event.reply('file-save', `File ${arg} saved`);
+});
+
+ipcMain.on('close-window', async (event, arg) => {
+  console.log('window closed');
+  event.reply('close-window');
 });
 
 // Create tw.config.json file
@@ -293,6 +300,11 @@ const createWindow = async () => {
     await installExtensions();
   }
 
+  if (mainWindow) {
+    mainWindow.show();
+    return;
+  }
+
   mainWindow = new BrowserWindow({
     show: true,
     width: 1600,
@@ -321,17 +333,21 @@ const createWindow = async () => {
     }
   });
 
-  mainWindow.on('closed', () => {
-    // Close the MongoDB connection when the window is closed.
-    db.disconnect()
-      .then(() => {
-        console.log('Disconnected from MongoDB');
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+  app.on('before-quit', () => {
+    if (CLOUD_STATUS === 'on') {
+      // Close the MongoDB connection when the window is closed.
+      db.disconnect()
+        .then(() => {
+          console.log('Disconnected from MongoDB');
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
     mainWindow = null;
   });
+
+  mainWindow.on('closed', () => {});
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
@@ -384,6 +400,12 @@ function handlerPartyLootShare(menuItem: MenuItem) {
   createWindow();
 }
 
+async function connectDB() {
+  const client = await db.connect();
+  const collection = await db.getAllHuntSessionsByUserId(2);
+  global.db = client;
+}
+
 /**
  * Add Tray
  */
@@ -432,20 +454,13 @@ const addTray = () => {
 };
 
 app.on('ready', async () => {
-  const client = await db.connect();
-  const collection = await db.getAllHuntSessionsByUserId(2);
-  global.db = client;
+  // connectDB();
 });
 
 app
   .whenReady()
   .then(() => {
-    // createWindow();
-    app.on('activate', async () => {
-      // On macOS it's common to re-create a window in the app when the
-      // dock icon is clicked and there are no other windows open.
-      if (mainWindow === null) createWindow();
-    });
+    createWindow();
     addTray();
   })
   .catch(console.log);

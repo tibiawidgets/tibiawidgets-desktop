@@ -17,6 +17,8 @@ export type Session = {
   xpPerHour: number,
 };
 
+export type CloudStatusType = 'on' | 'off';
+
 export type KilledMonster = {
   count: number,
   name: string,
