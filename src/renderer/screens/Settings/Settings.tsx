@@ -10,7 +10,7 @@ const Settings = () => {
   return (
     <section className="w-full p-5 max-h-full overflow-y-scroll">
       <h1 className="section-title">Settings</h1>
-      <div className="card">
+      <div className="card hidden">
         <div className="card-title mt-10 text-lg font-bold">
           My hunts information
         </div>

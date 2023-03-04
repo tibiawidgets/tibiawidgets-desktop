@@ -6,6 +6,7 @@ import { CharDialog } from 'components/CharDialog';
 import HuntSessionSummary from 'components/HuntSessionSummary/HuntSessionSummary';
 import './HuntSessions.scss';
 import { useTibiaWidgetsContext } from 'contexts/TibiaWidgetsContext';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 
 const HuntSessions = () => {
   const [showCharDialog, setShowCharDialog] = useState(false);
@@ -25,6 +26,7 @@ const HuntSessions = () => {
   return (
     <div className="w-full">
       <h1 className="section-title mb-2">Hunt Sessions</h1>
+      {/* {' '}
       <button
         type="button"
         className="px-4 py-2 rounded bg-indigo-500 hover:bg-indigo-700 text-white"
@@ -40,14 +42,18 @@ const HuntSessions = () => {
         ]}
         onSelect={(e) => console.log(e)}
       />
-      <p className="my-5">
-        Revisit your hunting sessions, analyze and improve your hunt.
+      */}
+      <p className="flex my-5 justify-between items-center">
+        <span>
+          Revisit your hunting sessions, analyze and improve your hunt.
+        </span>
         <button
           type="button"
-          className="px-4 py-2 rounded bg-indigo-500 hover:bg-indigo-700 text-white"
+          className=" flex px-4 py-2 rounded bg-indigo-500 hover:bg-indigo-700 text-white"
           onClick={synchHuntSessions}
         >
-          Synch
+          <ArrowPathIcon className="w-5 h-5 mr-2" />
+          <span>Synch</span>
         </button>
       </p>
       <div>
