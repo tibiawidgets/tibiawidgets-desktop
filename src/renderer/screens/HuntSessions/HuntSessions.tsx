@@ -11,7 +11,7 @@ const HuntSessions = () => {
   const [showCharDialog, setShowCharDialog] = useState(false);
   const [selected, setSelected] = useState<HuntSession>({ name: '' });
   const { appConfig } = useTibiaWidgetsContext();
-  const { hunts, synchHuntSessions } = useHuntSessions();
+  const { hunts, synchHuntSessions, filteredHunts } = useHuntSessions();
 
   const getSelectedHunt = (name: string) => {
     return hunts.filter((hunt) => hunt.name === name)[0];
@@ -59,13 +59,13 @@ const HuntSessions = () => {
         <Chart />
       </div>
       {hunts ? (
-        <div className="flex flex-col h-96">
+        <div className="flex flex-col">
           <h2 className="text-lg font-bold">
             Your hunting sessions ({hunts.length})
           </h2>
-          <div className="flex overflow-y-hidden">
-            <div className="border-2 border-black rounded p-2 mr-1 max-w-sm min-w-60 flex-shrink-0 overflow-y-scroll h-full">
-              {hunts.map((hunt: HuntSession) => (
+          <div className="flex pb-8 h-96">
+            <div className="border-2 border-black rounded p-2 mr-1 max-w-sm min-w-60 flex-shrink-0 overflow-y-scroll h-full mb-8">
+              {filteredHunts.map((hunt: HuntSession) => (
                 <button
                   type="button"
                   key={hunt.name}

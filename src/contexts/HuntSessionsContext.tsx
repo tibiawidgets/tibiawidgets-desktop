@@ -15,11 +15,13 @@ export type HuntSession = {
 
 export type HuntSessionsContextValue = {
   hunts: HuntSession[];
+  filteredHunts: HuntSession[];
   synchHuntSessions: () => void;
 };
 
 const initialHuntsContextValue: HuntSessionsContextValue = {
   hunts: [],
+  filteredHunts: [],
   synchHuntSessions: () => {},
 };
 
@@ -32,6 +34,7 @@ const HuntSessionsContextProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [hunts, setHunts] = useState<Array<HuntSession>>([]);
   const { appConfig } = useTibiaWidgetsContext();
+  const [filteredHunts, setFilteredHunts] = useState<Array<HuntSession>>([]);
 
   const getHuntingSessions = useCallback(async () => {
     if (appConfig.tibiaClientPath) {
@@ -53,15 +56,17 @@ const HuntSessionsContextProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     window.electron.ipcRenderer.on('getHuntSessions', (huntSessions) => {
       const myhunts = huntSessions as HuntSession[];
-      console.log(myhunts.length);
       setHunts(myhunts);
+      setFilteredHunts(myhunts.slice().reverse());
     });
 
     getHuntingSessions();
   }, [getHuntingSessions]);
 
   return (
-    <HuntSessionsContext.Provider value={{ hunts, synchHuntSessions }}>
+    <HuntSessionsContext.Provider
+      value={{ hunts, synchHuntSessions, filteredHunts }}
+    >
       {children}
     </HuntSessionsContext.Provider>
   );

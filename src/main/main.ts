@@ -309,10 +309,10 @@ const createWindow = async () => {
     show: true,
     width: 1600,
     height: 980,
-    resizable: true,
+    resizable: false,
     icon: getAssetPath('icon.png'),
     webPreferences: {
-      devTools: true,
+      devTools: false,
       sandbox: false,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
