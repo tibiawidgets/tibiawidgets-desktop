@@ -222,11 +222,12 @@ export function makeDirectoryCopy(fromPath: string, toPath: string) {
 
 export function copyHuntsFiles(
   tibiaClientPath: string,
-  tibiaWidgetsPath: string
+  tibiaWidgetsPath: string,
+  force: boolean
 ) {
   const fromPath = path.join(tibiaClientPath, PATH_HUNTS_TIBIA_CLIENT);
   const toPath = path.join(tibiaWidgetsPath, PATH_HUNTS_TIBIA_WIDGETS);
-  if (!fs.existsSync(toPath)) {
+  if (!fs.existsSync(toPath) || force) {
     console.log('Copying hunt files');
     console.log({ fromPath, toPath });
     makeDirectoryCopy(fromPath, toPath);

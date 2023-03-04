@@ -15,10 +15,12 @@ export type HuntSession = {
 
 export type HuntSessionsContextValue = {
   hunts: HuntSession[];
+  synchHuntSessions: () => void;
 };
 
 const initialHuntsContextValue: HuntSessionsContextValue = {
   hunts: [],
+  synchHuntSessions: () => {},
 };
 
 const HuntSessionsContext = createContext<HuntSessionsContextValue>(
@@ -33,21 +35,33 @@ const HuntSessionsContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const getHuntingSessions = useCallback(async () => {
     if (appConfig.tibiaClientPath) {
-      window.electron.ipcRenderer.on('getHuntSessions', (huntSessions) => {
-        const myhunts = huntSessions as HuntSession[];
-        setHunts(myhunts);
-      });
       window.electron.ipcRenderer.sendMessage('getHuntSessions', []);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appConfig]);
 
+  const synchHuntSessions = async () => {
+    if (appConfig.tibiaClientPath) {
+      window.electron.ipcRenderer.once('synchHuntSessions', () => {
+        console.log('synch finilized');
+        getHuntingSessions();
+      });
+      window.electron.ipcRenderer.sendMessage('synchHuntSessions', []);
+    }
+  };
+
   useEffect(() => {
+    window.electron.ipcRenderer.on('getHuntSessions', (huntSessions) => {
+      const myhunts = huntSessions as HuntSession[];
+      console.log(myhunts.length);
+      setHunts(myhunts);
+    });
+
     getHuntingSessions();
   }, [getHuntingSessions]);
 
   return (
-    <HuntSessionsContext.Provider value={{ hunts }}>
+    <HuntSessionsContext.Provider value={{ hunts, synchHuntSessions }}>
       {children}
     </HuntSessionsContext.Provider>
   );

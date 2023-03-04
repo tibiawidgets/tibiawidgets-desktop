@@ -11,7 +11,7 @@ const HuntSessions = () => {
   const [showCharDialog, setShowCharDialog] = useState(false);
   const [selected, setSelected] = useState<HuntSession>({ name: '' });
   const { appConfig } = useTibiaWidgetsContext();
-  const { hunts } = useHuntSessions();
+  const { hunts, synchHuntSessions } = useHuntSessions();
 
   const getSelectedHunt = (name: string) => {
     return hunts.filter((hunt) => hunt.name === name)[0];
@@ -42,6 +42,13 @@ const HuntSessions = () => {
       />
       <p className="my-5">
         Revisit your hunting sessions, analyze and improve your hunt.
+        <button
+          type="button"
+          className="px-4 py-2 rounded bg-indigo-500 hover:bg-indigo-700 text-white"
+          onClick={synchHuntSessions}
+        >
+          Synch
+        </button>
       </p>
       <div>
         <Chart />

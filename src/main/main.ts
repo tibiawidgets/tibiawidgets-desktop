@@ -151,7 +151,7 @@ ipcMain.on('init', async (event, arg) => {
     appConfig = getAppConfig();
   }
   // Copy hunt files
-  copyHuntsFiles(appConfig.tibiaClientPath, appConfig.dirRoot);
+  copyHuntsFiles(appConfig.tibiaClientPath, appConfig.dirRoot, false);
   // reply to context
   event.reply('init', appConfig);
 });
@@ -229,12 +229,30 @@ ipcMain.on('getHuntSessions', async (event, arg) => {
 
       // remove duplicates by starting date+time
       hunts = removeDuplicatesBySessionStart(hunts);
+      hunts.sort((huntA: HuntSession, huntB: HuntSession) => {
+        if (huntA.name < huntB.name) {
+          return -1;
+        }
+        return 1;
+      });
 
       event.reply('getHuntSessions', hunts);
     }
   } else {
     console.log('Invalid client path');
   }
+});
+
+ipcMain.on('synchHuntSessions', async (event, arg) => {
+  console.log('synch hunt sessions');
+  let appConfig = getAppConfig();
+  if (!validateClientPath(appConfig.tibiaClientPath)) {
+    updateClientPath();
+    appConfig = getAppConfig();
+  }
+  // Copy hunt files
+  copyHuntsFiles(appConfig.tibiaClientPath, appConfig.dirRoot, true);
+  event.reply('synchHuntSessions');
 });
 
 if (process.env.NODE_ENV === 'production') {
