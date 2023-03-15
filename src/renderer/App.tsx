@@ -7,6 +7,7 @@ import Drawer from '../components/Drawer/Drawer';
 import Settings from './screens/Settings/Settings';
 import HuntSessions from './screens/HuntSessions/HuntSessions';
 import PartyLoot from './screens/PartyLoot/PartyLoot';
+import Cloud from './screens/Cloud';
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
               <Routes>
                 <Route path="/party-loot" element={<PartyLoot />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/cloud" element={<Cloud />} />
                 <Route path="/hunt-sessions" element={<HuntSessions />} />
                 <Route path="/" element={<Home />} />
               </Routes>

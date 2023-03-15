@@ -16,10 +16,20 @@ const menuItems = [
     route: '/hunt-sessions',
   },
   {
+    label: 'Cloud Data',
+    premium: true,
+    route: '/cloud',
+  },
+  {
     label: 'Settings',
     route: '/settings',
   },
 ];
+
+const PremiumLabel = ({ isPremium }: { isPremium: boolean }) => {
+  if (!isPremium) return null;
+  return <span className="premium-label outlined-text">Premium</span>;
+};
 
 const Drawer = () => (
   <nav className="flex h-full drawer-navbar" aria-label="Sidebar">
@@ -33,6 +43,7 @@ const Drawer = () => (
               to={item?.route || ''}
             >
               {item.label}
+              <PremiumLabel isPremium={item.premium || false} />
             </NavLink>
           );
         })}
