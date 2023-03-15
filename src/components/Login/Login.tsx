@@ -53,7 +53,7 @@ const Login = () => {
         </span>
       </div>
       <button
-        className="bg-blue-500 text-white rounded py-2 px-4 hover:bg-blue-700 w-full mt-6"
+        className="bg-blue-500 text-white rounded py-2 px-4 hover:bg-blue-700 w-full"
         type="submit"
       >
         Sign In with Google

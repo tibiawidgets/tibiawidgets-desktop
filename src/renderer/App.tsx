@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.scss';
 import { HuntSessionsContextProvider } from 'contexts/HuntSessionsContext';
@@ -12,12 +13,13 @@ import PartyLoot from './screens/PartyLoot/PartyLoot';
 import Cloud from './screens/Cloud';
 
 export default function App() {
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
   return (
     <TibiaWidgetsContextProvider>
       <HuntSessionsContextProvider>
         <div className=" h-full flex">
           <Router>
-            <Drawer />
+            <Drawer onClickLogin={() => setIsLoginOpen(true)} />
             <div className="flex px-5 py-10 bg-slate-100 flex-grow overflow-y-scroll">
               <Routes>
                 <Route path="/party-loot" element={<PartyLoot />} />
@@ -27,7 +29,12 @@ export default function App() {
                 <Route path="/" element={<Home />} />
               </Routes>
             </div>
-            <Dialog title="Login to your account" isOpen>
+            <Dialog
+              title="Login to your account"
+              isOpen={isLoginOpen}
+              showCloseIcon
+              onClose={() => setIsLoginOpen(false)}
+            >
               <Login />
             </Dialog>
           </Router>
