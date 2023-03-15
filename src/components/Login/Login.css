@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.active-tab {
+  text-underline-offset: 0.4em;
+  @apply decoration-blue-500 underline leading-4;
+}
+
+.divider-or {
+  position: relative;
+}
+s .divider-or::after {
+  content: 'OR';
+  display: inline-block;
+  padding: 0.5em;
+  background-color: white;
+  color: gray;
+  font-weight: bold;
+}

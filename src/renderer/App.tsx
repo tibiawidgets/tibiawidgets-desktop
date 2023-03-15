@@ -2,6 +2,8 @@ import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.scss';
 import { HuntSessionsContextProvider } from 'contexts/HuntSessionsContext';
 import { TibiaWidgetsContextProvider } from 'contexts/TibiaWidgetsContext';
+import Login from 'components/Login';
+import Dialog from 'components/Dialog';
 import Home from './screens/Home';
 import Drawer from '../components/Drawer/Drawer';
 import Settings from './screens/Settings/Settings';
@@ -25,6 +27,9 @@ export default function App() {
                 <Route path="/" element={<Home />} />
               </Routes>
             </div>
+            <Dialog title="Login to your account" isOpen>
+              <Login />
+            </Dialog>
           </Router>
         </div>
       </HuntSessionsContextProvider>
